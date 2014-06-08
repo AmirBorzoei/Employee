@@ -1,0 +1,54 @@
+﻿<UserControl x:Class="Employees.Administration.Views.UserView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:dxlc="http://schemas.devexpress.com/winfx/2008/xaml/layoutcontrol"
+             xmlns:dxg="http://schemas.devexpress.com/winfx/2008/xaml/grid"
+             xmlns:dxe="http://schemas.devexpress.com/winfx/2008/xaml/editors" >
+    <dxlc:LayoutControl>
+        <dxlc:LayoutGroup Orientation="Vertical"
+                          ItemSpace="20" >
+            <dxg:GridControl ItemsSource="{Binding Users}" >
+                <dxg:GridControl.Columns>
+                    <dxg:GridColumn x:Name="FirstName"
+                                    Width="10"
+                                    FieldName="FirstName"
+                                    Header="نام" />
+                    <dxg:GridColumn x:Name="LastName"
+                                    Width="10"
+                                    FieldName="LastName"
+                                    Header="نام خانوادگی" />
+                    <dxg:GridColumn x:Name="UserName"
+                                    Width="10"
+                                    FieldName="UserName"
+                                    Header="نام کاربری" />
+                    <dxg:GridColumn x:Name="Password"
+                                    Width="10"
+                                    FieldName="Password"
+                                    Header="کلمه عبور" >
+                        <dxg:GridColumn.EditSettings>
+                            <dxe:PasswordBoxEditSettings />
+                        </dxg:GridColumn.EditSettings>
+                    </dxg:GridColumn>
+                    <dxg:GridColumn x:Name="UserGroups"
+                                    Width="15"
+                                    FieldName="UserGroups"
+                                    Header="گروه کاربری" >
+                        <dxg:GridColumn.EditSettings>
+                            <dxe:ComboBoxEditSettings ItemsSource="{Binding UserGroups}" >
+                                <dxe:ComboBoxEditSettings.StyleSettings>
+                                    <dxe:CheckedComboBoxStyleSettings />
+                                </dxe:ComboBoxEditSettings.StyleSettings>
+                            </dxe:ComboBoxEditSettings>
+                        </dxg:GridColumn.EditSettings>
+                    </dxg:GridColumn>
+                </dxg:GridControl.Columns>
+                <dxg:GridControl.View>
+                    <dxg:TableView x:Name="TableViewAllEmployees"
+                                   AutoWidth="True"
+                                   NewItemRowPosition="Top"
+                                   ShowGroupPanel="False" />
+                </dxg:GridControl.View>
+            </dxg:GridControl>
+        </dxlc:LayoutGroup>
+    </dxlc:LayoutControl>
+</UserControl>

@@ -1,0 +1,100 @@
+<Window x:Class="Employees.Views.ShellView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:dxlc="http://schemas.devexpress.com/winfx/2008/xaml/layoutcontrol"
+        WindowState="Maximized">
+    <dxlc:LayoutControl Padding="2">
+        <dxlc:LayoutGroup Orientation="Vertical"
+                          ItemSpace="2">
+            <!--Header of Shell-->
+            <dxlc:LayoutGroup VerticalAlignment="Top"
+                              ItemSpace="10"
+                              Padding="-5 -8"
+                              View="GroupBox"
+                              Background="LightGray">
+                <!--Logo-->
+                <dxlc:LayoutItem HorizontalAlignment="Left">
+                    <Image Source="/Employees;component/Images/Logos/Employees_Logo.png"
+                           Stretch="Uniform"
+                           MaxHeight="40"
+                           MaxWidth="100" />
+                </dxlc:LayoutItem>
+                <!--Menu-->
+                <dxlc:LayoutGroup HorizontalAlignment="Left"
+                                  VerticalAlignment="Center">
+                    <Button x:Name="ShowPersonally"
+                            Content="پرسنلی"
+                            Style="{StaticResource ShellMenuButton}" />
+                    <Button x:Name="ShowFinancial"
+                            Content="مالی"
+                            Style="{StaticResource ShellMenuButton}" />
+                    <Button x:Name="ShowLoan"
+                            Content="وام"
+                            Style="{StaticResource ShellMenuButton}" />
+                    <Button x:Name="ShowBasicData"
+                            Content="اطلاعات پایه"
+                            Style="{StaticResource ShellMenuButton}" />
+                    <Button x:Name="ShowAdministration"
+                            Content="مدیریت"
+                            Style="{StaticResource ShellMenuButton}" />
+                </dxlc:LayoutGroup>
+                <!--Toolbar-->
+                <dxlc:LayoutGroup HorizontalAlignment="Right"
+                                  VerticalAlignment="Center">
+                    <Button x:Name="Save"
+                            ToolTip="ذخیره"
+                            Style="{StaticResource ShellToolbarButton}">
+                        <Image Source="/Employees;component/Images/Icons/Save.png"
+                               Style="{StaticResource ShellToolbarImage}" />
+                    </Button>
+                    <Button x:Name="Reload"
+                            ToolTip="بازیابی"
+                            Style="{StaticResource ShellToolbarButton}">
+                        <Image Source="/Employees;component/Images/Icons/Reload.png"
+                               Style="{StaticResource ShellToolbarImage}" />
+                    </Button>
+                    <Button x:Name="New"
+                            ToolTip="جدید"
+                            Style="{StaticResource ShellToolbarButton}">
+                        <Image Source="/Employees;component/Images/Icons/New.png"
+                               Style="{StaticResource ShellToolbarImage}" />
+                    </Button>
+                    <Button x:Name="Print"
+                            ToolTip="چاپ"
+                            Style="{StaticResource ShellToolbarButton}">
+                        <Image Source="/Employees;component/Images/Icons/Print.png"
+                               Style="{StaticResource ShellToolbarImage}" />
+                    </Button>
+                    <Button x:Name="Logout"
+                            ToolTip="خروج"
+                            Style="{StaticResource ShellToolbarButton}">
+                        <Image Source="/Employees;component/Images/Icons/Logout.png"
+                               Style="{StaticResource ShellToolbarImage}" />
+                    </Button>
+                    <Button x:Name="ChangeTheme"
+                            ToolTip="تغییر قالب"
+                            Style="{StaticResource ShellToolbarButton}">
+                        <Image Source="/Employees;component/Images/Icons/Themes.png"
+                               Style="{StaticResource ShellToolbarImage}" />
+                    </Button>
+                </dxlc:LayoutGroup>
+            </dxlc:LayoutGroup>
+
+            <!--Body of Shell-->
+            <dxlc:LayoutGroup View="GroupBox"
+                              Background="LightGray"
+                              Header="{Binding ActiveItem.DisplayName}">
+                <dxlc:LayoutGroup.HeaderTemplate>
+                    <DataTemplate>
+                        <TextBlock HorizontalAlignment="Center"
+                                   Text="{Binding }">
+                        </TextBlock>
+                    </DataTemplate>
+                </dxlc:LayoutGroup.HeaderTemplate>
+                <ContentControl x:Name="ActiveItem"
+                                FlowDirection="RightToLeft"
+                                Margin="-8" />
+            </dxlc:LayoutGroup>
+        </dxlc:LayoutGroup>
+    </dxlc:LayoutControl>
+</Window>

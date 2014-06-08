@@ -1,0 +1,123 @@
+﻿<UserControl x:Class="Employees.Personally.Views.EmployeeInfoView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:dxe="http://schemas.devexpress.com/winfx/2008/xaml/editors"
+             xmlns:dxg="http://schemas.devexpress.com/winfx/2008/xaml/grid"
+             xmlns:dxlc="http://schemas.devexpress.com/winfx/2008/xaml/layoutcontrol"
+             xmlns:System="clr-namespace:System;assembly=mscorlib">
+
+    <UserControl.Resources>
+        <System:Type x:Key="TypeOfInt32">System:Int32</System:Type>
+    </UserControl.Resources>
+
+    <dxlc:LayoutControl>
+        <dxlc:LayoutGroup Orientation="Vertical"
+                          ItemSpace="20">
+            <dxlc:LayoutGroup ItemSpace="20">
+                <dxlc:LayoutGroup Orientation="Vertical">
+                    <dxlc:LayoutItem Label="کد پرسنلی">
+                        <dxe:TextEdit x:Name="CurrentEmployee_PersonallyCode"
+                                      EditValue="{Binding CurrentEmployee.PersonallyCode}" />
+                    </dxlc:LayoutItem>
+                    <dxlc:LayoutItem Label="کد ملی">
+                        <dxe:TextEdit x:Name="CurrentEmployee_NationalCode"
+                                      EditValue="{Binding CurrentEmployee.NationalCode}" />
+                    </dxlc:LayoutItem>
+
+                    <dxlc:LayoutItem Label="نام">
+                        <dxe:TextEdit x:Name="CurrentEmployee_FirstName"
+                                      EditValue="{Binding CurrentEmployee.FirstName}" />
+                    </dxlc:LayoutItem>
+                    <dxlc:LayoutItem Label="نام خانوادگی">
+                        <dxe:TextEdit x:Name="CurrentEmployee_LastName"
+                                      EditValue="{Binding CurrentEmployee.LastName}" />
+                    </dxlc:LayoutItem>
+
+                    <dxlc:LayoutItem Label="نام پدر">
+                        <dxe:TextEdit x:Name="CurrentEmployee_FatherName"
+                                      EditValue="{Binding CurrentEmployee.FatherName}" />
+                    </dxlc:LayoutItem>
+                </dxlc:LayoutGroup>
+
+                <dxlc:LayoutGroup Orientation="Vertical">
+                    <dxlc:LayoutItem Label="سن">
+                        <dxe:SpinEdit x:Name="CurrentEmployee_Age"
+                                      EditValue="{Binding CurrentEmployee.Age}"
+                                      EditValueType="{StaticResource TypeOfInt32}" />
+                    </dxlc:LayoutItem>
+                    <dxlc:LayoutItem Label="سابقه">
+                        <dxe:SpinEdit x:Name="CurrentEmployee_WorkHistory"
+                                      EditValue="{Binding CurrentEmployee.WorkHistory}"
+                                      EditValueType="{StaticResource TypeOfInt32}" />
+                    </dxlc:LayoutItem>
+                    <dxlc:LayoutItem Label="تعداد عائله">
+                        <dxe:SpinEdit x:Name="CurrentEmployee_FamilyCount"
+                                      EditValue="{Binding CurrentEmployee.FamilyCount}"
+                                      EditValueType="{StaticResource TypeOfInt32}" />
+                    </dxlc:LayoutItem>
+                    <dxlc:LayoutItem>
+                        <StackPanel Orientation="Horizontal"
+                                    Margin="0 0 20 0">
+                            <dxe:CheckEdit x:Name="CurrentEmployee_IsMarried"
+                                           EditValue="{Binding CurrentEmployee.IsMarried}" />
+                            <TextBlock Text="متاهل"
+                                       Margin="5 0" />
+                        </StackPanel>
+                    </dxlc:LayoutItem>
+                </dxlc:LayoutGroup>
+            </dxlc:LayoutGroup>
+
+            <dxg:GridControl x:Name="AllEmployees"
+                             ItemsSource="{Binding AllEmployees}">
+                <dxg:GridControl.Columns>
+                    <dxg:GridColumn x:Name="PersonallyCode"
+                                    Width="10"
+                                    FieldName="PersonallyCode"
+                                    Header="کد پرسنلی" />
+                    <dxg:GridColumn x:Name="NationalCode"
+                                    Width="10"
+                                    FieldName="NationalCode"
+                                    Header="کد ملی" />
+                    <dxg:GridColumn x:Name="FirstName"
+                                    FixedWidth="False"
+                                    Width="20"
+                                    FieldName="FirstName"
+                                    Header="نام" />
+                    <dxg:GridColumn x:Name="LastName"
+                                    Width="20"
+                                    FieldName="LastName"
+                                    Header="نام خانوادگی" />
+                    <dxg:GridColumn x:Name="FatherName"
+                                    Width="20"
+                                    FieldName="FatherName"
+                                    Header="نام پدر" />
+                    <dxg:GridColumn x:Name="Age"
+                                    Width="10"
+                                    FieldName="Age"
+                                    Header="سن" />
+                    <dxg:GridColumn x:Name="WorkHistory"
+                                    Width="10"
+                                    FieldName="WorkHistory"
+                                    Header="سابقه" />
+                    <dxg:GridColumn x:Name="FamilyCount"
+                                    Width="10"
+                                    FieldName="FamilyCount"
+                                    Header="تعداد عائله" />
+                    <dxg:GridColumn x:Name="IsMarried"
+                                    Width="10"
+                                    FieldName="IsMarried"
+                                    Header="متاهل">
+                        <dxg:GridColumn.EditSettings>
+                            <dxe:CheckEditSettings />
+                        </dxg:GridColumn.EditSettings>
+                    </dxg:GridColumn>
+                </dxg:GridControl.Columns>
+                <dxg:GridControl.View>
+                    <dxg:TableView x:Name="TableViewAllEmployees"
+                                   AutoWidth="True"
+                                   AllowEditing="False" />
+                </dxg:GridControl.View>
+            </dxg:GridControl>
+        </dxlc:LayoutGroup>
+    </dxlc:LayoutControl>
+</UserControl>

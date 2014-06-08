@@ -1,0 +1,10 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:dx="http://schemas.devexpress.com/winfx/2008/xaml/core"
+                    xmlns:Converters="clr-namespace:Employees.Shared.Converters;assembly=Employees.Shared" >
+
+    <dx:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter" />
+
+    <Converters:TestConverter x:Key="TestConverter" />
+
+</ResourceDictionary>
