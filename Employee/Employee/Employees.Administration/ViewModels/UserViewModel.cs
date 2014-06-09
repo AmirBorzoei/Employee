@@ -1,5 +1,7 @@
-﻿using AutoMapper;
+﻿using System.Web.UI.WebControls;
+using AutoMapper;
 using Caliburn.Micro;
+using Employees.DAL.Criteria;
 using Employees.DAL.Entities;
 using Employees.DAL.Repositories;
 using Employees.Shared.Constants;
@@ -49,7 +51,7 @@ namespace Employees.Administration.ViewModels
 
                 if (user.State == ModelStates.New)
                     _employeeUnitOfWork.UserRepository.Insert(userEntity);
-                if (user.State == ModelStates.Modified)
+                else if (user.State == ModelStates.Modified)
                     _employeeUnitOfWork.UserRepository.Update(userEntity);
             }
 
@@ -66,7 +68,14 @@ namespace Employees.Administration.ViewModels
         private void LoadUsers()
         {
             Users.Clear();
-            Users.AddRange(Mapper.Map<User[]>(_employeeUnitOfWork.UserRepository.Get()));
+
+            var searchQuery = new SearchQuery<UserEntity>();
+            searchQuery.AddSortCriteria(new ExpressionSortCriteria<UserEntity, string>(u => u.UserName, SortDirection.Ascending));
+            searchQuery.IncludeProperties = "UserGroups";
+
+            var userEntities = _employeeUnitOfWork.UserRepository.Get(searchQuery);
+
+            Users.AddRange(Mapper.Map<User[]>(userEntities));
         }
 
         private void LoadUserGroups()

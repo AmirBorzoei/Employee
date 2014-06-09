@@ -7,7 +7,7 @@ using System.Collections.Generic;
 
 namespace Employees.Shared.Converters
 {
-    public class TestConverter : IValueConverter
+    public class ObjectListToUserGroupListConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
@@ -16,7 +16,11 @@ namespace Employees.Shared.Converters
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            return value;
+            var objList = value as IEnumerable<object>;
+            if (objList == null) return value;
+
+            var userGroups = objList.Cast<UserGroup>().ToList();
+            return userGroups;
         }
     }
 }

@@ -60,6 +60,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Constants\ModelStates.cs" />
+    <Compile Include="Converters\ObjectListToUserGroupListConverter.cs" />
     <Compile Include="Converters\TestConverter.cs" />
     <Compile Include="Events\ActiveItemChangedMessage.cs" />
     <Compile Include="Interfaces\ISupportNew.cs" />

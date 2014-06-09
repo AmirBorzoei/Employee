@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using Caliburn.Micro;
 
 namespace Employees.Shared.Models
@@ -10,12 +11,12 @@ namespace Employees.Shared.Models
         private string _password;
         private string _firstName;
         private string _lastName;
-        private BindableCollection<UserGroup> _userGroups;
+        private List<UserGroup> _userGroups;
 
 
         public User()
         {
-            _userGroups = new BindableCollection<UserGroup>();
+            _userGroups = new List<UserGroup>();
         }
 
 
@@ -69,7 +70,7 @@ namespace Employees.Shared.Models
             }
         }
 
-        public BindableCollection<UserGroup> UserGroups
+        public List<UserGroup> UserGroups
         {
             get { return _userGroups; }
             set
@@ -77,6 +78,11 @@ namespace Employees.Shared.Models
                 _userGroups = value;
                 NotifyOfPropertyChange(() => UserGroups);
             }
+        }
+
+        public string UserGroupsDisplay
+        {
+            get { return string.Join(";", _userGroups); }
         }
     }
 }

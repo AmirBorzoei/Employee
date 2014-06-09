@@ -6,5 +6,6 @@
     <dx:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter" />
 
     <Converters:TestConverter x:Key="TestConverter" />
+    <Converters:ObjectListToUserGroupListConverter x:Key="ObjectListToUserGroupListConverter" />
 
 </ResourceDictionary>

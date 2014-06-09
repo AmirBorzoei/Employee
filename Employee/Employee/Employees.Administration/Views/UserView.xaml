@@ -3,7 +3,8 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:dxlc="http://schemas.devexpress.com/winfx/2008/xaml/layoutcontrol"
              xmlns:dxg="http://schemas.devexpress.com/winfx/2008/xaml/grid"
-             xmlns:dxe="http://schemas.devexpress.com/winfx/2008/xaml/editors" >
+             xmlns:dxe="http://schemas.devexpress.com/winfx/2008/xaml/editors"
+             xmlns:Views="clr-namespace:Employees.Administration.Views" >
     <dxlc:LayoutControl>
         <dxlc:LayoutGroup Orientation="Vertical"
                           ItemSpace="20" >
@@ -30,16 +31,19 @@
                         </dxg:GridColumn.EditSettings>
                     </dxg:GridColumn>
                     <dxg:GridColumn x:Name="UserGroups"
+                                    FieldName="UserGroupsDisplay"
                                     Width="15"
-                                    FieldName="UserGroups"
                                     Header="گروه کاربری" >
-                        <dxg:GridColumn.EditSettings>
-                            <dxe:ComboBoxEditSettings ItemsSource="{Binding UserGroups}" >
-                                <dxe:ComboBoxEditSettings.StyleSettings>
-                                    <dxe:CheckedComboBoxStyleSettings />
-                                </dxe:ComboBoxEditSettings.StyleSettings>
-                            </dxe:ComboBoxEditSettings>
-                        </dxg:GridColumn.EditSettings>
+                        <dxg:GridColumn.EditTemplate>
+                            <ControlTemplate>
+                                <dxe:ComboBoxEdit ItemsSource="{Binding DataContext.UserGroups, RelativeSource={RelativeSource AncestorType=Views:UserView, Mode=FindAncestor}}"
+                                                  EditValue="{Binding RowData.Row.UserGroups, Converter={StaticResource ObjectListToUserGroupListConverter}}" >
+                                    <dxe:ComboBoxEdit.StyleSettings>
+                                        <dxe:CheckedComboBoxStyleSettings />
+                                    </dxe:ComboBoxEdit.StyleSettings>
+                                </dxe:ComboBoxEdit>
+                            </ControlTemplate>
+                        </dxg:GridColumn.EditTemplate>
                     </dxg:GridColumn>
                 </dxg:GridControl.Columns>
                 <dxg:GridControl.View>
