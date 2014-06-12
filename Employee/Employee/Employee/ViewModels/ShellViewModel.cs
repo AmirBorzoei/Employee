@@ -30,24 +30,19 @@ namespace Employees.ViewModels
 
         #region Menu Handler
 
-        public void ShowPersonally()
+        public void ShowBasicData()
         {
-            ActivateItem(_employeeInfoViewModel);
+            ActivateItem(null);
         }
-
+        
         public void ShowFinancial()
         {
             ActiveItem = null;
         }
 
-        public void ShowLoan()
+        public void ShowPersonally()
         {
-            ActivateItem(null);
-        }
-
-        public void ShowBasicData()
-        {
-            ActivateItem(null);
+            ActivateItem(_employeeInfoViewModel);
         }
 
         public void ShowAdministration()
