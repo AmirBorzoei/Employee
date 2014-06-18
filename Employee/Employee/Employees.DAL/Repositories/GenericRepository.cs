@@ -10,7 +10,16 @@ namespace Employees.DAL.Repositories
 {
     public class GenericRepository<TEntity> where TEntity : class
     {
-        public virtual List<TEntity> Get(SearchQuery<TEntity> searchQuery = null)
+        protected readonly DbContext _dbContext;
+
+
+        protected GenericRepository(DbContext dbContext)
+        {
+            _dbContext = dbContext;
+        }
+
+
+        protected virtual List<TEntity> Get(SearchQuery<TEntity> searchQuery = null)
         {
             var dbSet = GetDbSet();
             IQueryable<TEntity> query = dbSet;
@@ -87,7 +96,7 @@ namespace Employees.DAL.Repositories
             return dbSet.Find(id);
         }
 
-        public virtual TEntity Insert(TEntity entity)
+        protected virtual TEntity Insert(TEntity entity)
         {
             var context = GetDbContext();
             var dbSet = GetDbSet(context);
@@ -105,7 +114,7 @@ namespace Employees.DAL.Repositories
             Delete(entityToDelete);
         }
 
-        public virtual void Delete(TEntity entityToDelete)
+        protected virtual void Delete(TEntity entityToDelete)
         {
             var context = GetDbContext();
             var dbSet = GetDbSet(context);
@@ -118,24 +127,27 @@ namespace Employees.DAL.Repositories
             context.SaveChanges();
         }
 
-        public virtual TEntity Update(TEntity entityToUpdate)
+        protected virtual TEntity Update(TEntity entityToUpdate)
         {
             var context = GetDbContext();
             var dbSet = GetDbSet(context);
             dbSet.Attach(entityToUpdate);
-            context.Entry(entityToUpdate).State = EntityState.Modified;
+            //context.Entry(entityToUpdate).State = EntityState.Modified;
 
             context.SaveChanges();
 
             context.Entry(entityToUpdate).Reload();
+
             return entityToUpdate;
         }
 
 
         private DbContext GetDbContext()
         {
-            var context = IoC.Get<EmployeeContext>();
-            return context;
+            //var context = IoC.Get<EmployeeContext>();
+            //return context;
+
+            return _dbContext;
         }
 
         private DbSet<TEntity> GetDbSet()

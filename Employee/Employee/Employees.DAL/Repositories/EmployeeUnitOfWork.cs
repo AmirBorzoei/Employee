@@ -5,17 +5,19 @@ namespace Employees.DAL.Repositories
 {
     public interface IEmployeeUnitOfWork
     {
-        GenericRepository<UserGroupEntity> UserGroupRepository { get; }
-        GenericRepository<UserEntity> UserRepository { get; }
+        UserGroupRepository UserGroupRepository { get; }
+        UserRepository UserRepository { get; }
         GenericRepository<EmployeeEntity> EmployeeRepository { get; }
+
+        void SaveChanges();
     }
 
     public class EmployeeUnitOfWork : IEmployeeUnitOfWork, IDisposable
     {
         private readonly EmployeeContext _context;
         private readonly GenericRepository<EmployeeEntity> _employeeRepository;
-        private readonly GenericRepository<UserGroupEntity> _userGroupRepository;
-        private readonly GenericRepository<UserEntity> _userRepository;
+        private readonly UserGroupRepository _userGroupRepository;
+        private readonly UserRepository _userRepository;
         private bool _disposed;
 
 
@@ -23,9 +25,9 @@ namespace Employees.DAL.Repositories
         {
             _context = context;
 
-            _employeeRepository = new GenericRepository<EmployeeEntity>();
-            _userGroupRepository = new GenericRepository<UserGroupEntity>();
-            _userRepository = new GenericRepository<UserEntity>();
+            //_employeeRepository = new GenericRepository<EmployeeEntity>();
+            _userGroupRepository = new UserGroupRepository(_context);
+            _userRepository = new UserRepository(_context, _userGroupRepository);
         }
 
 
@@ -34,14 +36,19 @@ namespace Employees.DAL.Repositories
             get { return _employeeRepository; }
         }
 
-        public GenericRepository<UserGroupEntity> UserGroupRepository
+        public UserGroupRepository UserGroupRepository
         {
             get { return _userGroupRepository; }
         }
 
-        public GenericRepository<UserEntity> UserRepository
+        public UserRepository UserRepository
         {
             get { return _userRepository; }
+        }
+
+        public void SaveChanges()
+        {
+            _context.SaveChanges();
         }
 
 

@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Documents;
-using AutoMapper;
 using Caliburn.Micro;
 using Employees.DAL;
 using Employees.DAL.Entities;
@@ -58,8 +57,8 @@ namespace Employees.Personally.ViewModels
 
         public void Save()
         {
-            var employeeEntity = Mapper.Map<Employee, EmployeeEntity>(CurrentEmployee);
-            _employeeUnitOfWork.EmployeeRepository.Insert(employeeEntity);
+            //var employeeEntity = Mapper.Map<Employee, EmployeeEntity>(CurrentEmployee);
+            //_employeeUnitOfWork.EmployeeRepository.Insert(employeeEntity);
         }
 
         public void Print()
@@ -74,7 +73,7 @@ namespace Employees.Personally.ViewModels
 
         private void FillAllEmployees()
         {
-            AllEmployees.AddRange(Mapper.Map<IEnumerable<EmployeeEntity>, IEnumerable<Employee>>(_employeeUnitOfWork.EmployeeRepository.Get()));
+            //AllEmployees.AddRange(Mapper.Map<IEnumerable<EmployeeEntity>, IEnumerable<Employee>>(_employeeUnitOfWork.EmployeeRepository.Get()));
         }
 
         private void AddNewEmployeeToAllEmployees(Employee newEmployee)

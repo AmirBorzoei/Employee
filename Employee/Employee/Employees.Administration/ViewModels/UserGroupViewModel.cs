@@ -1,5 +1,4 @@
-﻿using AutoMapper;
-using Employees.DAL;
+﻿using Employees.DAL;
 using Employees.DAL.Entities;
 using Employees.DAL.Repositories;
 using Employees.Shared.Constants;
@@ -36,19 +35,16 @@ namespace Employees.Administration.ViewModels
 
             //var userGroupEntity = _employeeUnitOfWork.UserGroupRepository.GetByID(CurrentObject.UserGroupId);
 
-            var userGroupEntity = Mapper.Map<UserGroupEntity>(CurrentObject);
+            CurrentObject = _employeeUnitOfWork.UserGroupRepository.UpdateOrInsert(CurrentObject);
 
-            if (CurrentObject.State == ModelStates.New)
-                CurrentObject = Mapper.Map<UserGroup>(_employeeUnitOfWork.UserGroupRepository.Insert(userGroupEntity));
-            if (CurrentObject.State == ModelStates.Modified)
-                CurrentObject = Mapper.Map<UserGroup>(_employeeUnitOfWork.UserGroupRepository.Update(userGroupEntity));
+            _employeeUnitOfWork.SaveChanges();
         }
 
         public void Reload()
         {
             if (CurrentObject == null || CurrentObject.State == ModelStates.New) return;
 
-            CurrentObject = Mapper.Map<UserGroup>(_employeeUnitOfWork.UserGroupRepository.GetByID(CurrentObject.UserGroupId));
+            //CurrentObject = Mapper.Map<UserGroup>(_employeeUnitOfWork.UserGroupRepository.GetByID(CurrentObject.UserGroupId));
         }
     }
 }

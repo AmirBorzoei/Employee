@@ -2,7 +2,6 @@
 using System.Linq;
 using System.Web.UI.WebControls;
 using System.Windows.Input;
-using AutoMapper;
 using Caliburn.Micro;
 using DevExpress.Xpf.Docking;
 using DevExpress.Xpf.Grid;
@@ -80,11 +79,8 @@ namespace Employees.Administration.ViewModels
             var searchQuery = new SearchQuery<UserGroupEntity>();
             if (!string.IsNullOrEmpty(CurrentUserGroupSearch.UserGroupName))
                 searchQuery.AddFilter(ug => ug.UserGroupName.Contains(CurrentUserGroupSearch.UserGroupName));
-
-            searchQuery.AddSortCriteria(new ExpressionSortCriteria<UserGroupEntity, string>(ug => ug.UserGroupName, SortDirection.Ascending));
-
-            var userGroupEntities = _employeeUnitOfWork.UserGroupRepository.Get(searchQuery);
-            UserGroups.AddRange(Mapper.Map<IEnumerable<UserGroupEntity>, IEnumerable<UserGroup>>(userGroupEntities));
+            
+            UserGroups.AddRange(_employeeUnitOfWork.UserGroupRepository.GetUserGroups(searchQuery));
         }
 
         public void SearchPanelKeyDown(LayoutPanel layoutPanel, KeyEventArgs keyEventArgs)
@@ -132,6 +128,8 @@ namespace Employees.Administration.ViewModels
                                                                                        i.CurrentObject.UserGroupId == userGroup.UserGroupId);
             if (openDeletedItem != null)
                 Items.Remove(openDeletedItem);
+
+            _employeeUnitOfWork.SaveChanges();
 
             Reload();
         }

@@ -1,5 +1,4 @@
 ﻿using System.Web.UI.WebControls;
-using AutoMapper;
 using Caliburn.Micro;
 using Employees.DAL.Criteria;
 using Employees.DAL.Entities;
@@ -47,12 +46,7 @@ namespace Employees.Administration.ViewModels
         {
             foreach (var user in Users)
             {
-                var userEntity = Mapper.Map<UserEntity>(user);
-
-                if (user.State == ModelStates.New)
-                    _employeeUnitOfWork.UserRepository.Insert(userEntity);
-                else if (user.State == ModelStates.Modified)
-                    _employeeUnitOfWork.UserRepository.Update(userEntity);
+                _employeeUnitOfWork.UserRepository.UpdateOrInsert(user);
             }
 
             LoadUsers();
@@ -70,18 +64,15 @@ namespace Employees.Administration.ViewModels
             Users.Clear();
 
             var searchQuery = new SearchQuery<UserEntity>();
-            searchQuery.AddSortCriteria(new ExpressionSortCriteria<UserEntity, string>(u => u.UserName, SortDirection.Ascending));
             searchQuery.IncludeProperties = "UserGroups";
 
-            var userEntities = _employeeUnitOfWork.UserRepository.Get(searchQuery);
-
-            Users.AddRange(Mapper.Map<User[]>(userEntities));
+            Users.AddRange(_employeeUnitOfWork.UserRepository.GetUsers(searchQuery));
         }
 
         private void LoadUserGroups()
         {
             UserGroups.Clear();
-            UserGroups.AddRange(Mapper.Map<UserGroup[]>(_employeeUnitOfWork.UserGroupRepository.Get()));
+            UserGroups.AddRange(_employeeUnitOfWork.UserGroupRepository.GetUserGroups());
         }
     }
 }

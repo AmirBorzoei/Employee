@@ -23,33 +23,17 @@
                 <!--Menu-->
                 <dxlc:LayoutGroup HorizontalAlignment="Left"
                                   VerticalAlignment="Center">
+                    <Button x:Name="ShowAdministration"
+                            Content="مدیریت"
+                            Style="{StaticResource ShellMenuButton}" />
                     <Button x:Name="ShowBasicData"
                             Content="اطلاعات پایه"
-                            Style="{StaticResource ShellMenuButton}" />
-                    <Button x:Name="ShowReciption"
-                            Content="پذیرش"
-                            Style="{StaticResource ShellMenuButton}" />
-                    <Button x:Name="ShowPensions"
-                            Content="مستمری بگیران"
-                            Style="{StaticResource ShellMenuButton}"
-                            Width="100" />
-                    <Button x:Name="ShowManagers"
-                            Content="هییت مدیره"
-                            Style="{StaticResource ShellMenuButton}" />
-                    <Button x:Name="ShowResearch"
-                            Content="تحقیقات"
                             Style="{StaticResource ShellMenuButton}" />
                     <Button x:Name="ShowFinancial"
                             Content="حسابداری"
                             Style="{StaticResource ShellMenuButton}" />
-                    <Button x:Name="ShowBenefactors"
-                            Content="نیکوکاران"
-                            Style="{StaticResource ShellMenuButton}" />
                     <Button x:Name="ShowPersonally"
                             Content="پرسنلی"
-                            Style="{StaticResource ShellMenuButton}" />
-                    <Button x:Name="ShowAdministration"
-                            Content="مدیریت"
                             Style="{StaticResource ShellMenuButton}" />
                 </dxlc:LayoutGroup>
                 <!--Toolbar-->
