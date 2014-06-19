@@ -132,7 +132,7 @@ namespace Employees.DAL.Repositories
             var context = GetDbContext();
             var dbSet = GetDbSet(context);
             dbSet.Attach(entityToUpdate);
-            //context.Entry(entityToUpdate).State = EntityState.Modified;
+            context.Entry(entityToUpdate).State = EntityState.Modified;
 
             context.SaveChanges();
 
@@ -150,7 +150,7 @@ namespace Employees.DAL.Repositories
             return _dbContext;
         }
 
-        private DbSet<TEntity> GetDbSet()
+        protected DbSet<TEntity> GetDbSet()
         {
             var context = GetDbContext();
             return GetDbSet(context);

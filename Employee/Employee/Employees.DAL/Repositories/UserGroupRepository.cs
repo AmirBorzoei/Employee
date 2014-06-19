@@ -21,6 +21,7 @@ namespace Employees.DAL.Repositories
                 searchQuery = new SearchQuery<UserGroupEntity>();
 
             searchQuery.AddSortCriteria(new ExpressionSortCriteria<UserGroupEntity, string>(ug => ug.UserGroupName, SortDirection.Ascending));
+            searchQuery.AddSortCriteria(new ExpressionSortCriteria<UserGroupEntity, long>(ug => ug.UserGroupId, SortDirection.Ascending));
 
             var userGroupEntities = base.Get(searchQuery);
             return Mapper.Map<List<UserGroupEntity>, List<UserGroup>>(userGroupEntities);
