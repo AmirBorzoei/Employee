@@ -71,9 +71,12 @@
     <Compile Include="Criteria\ISortCriteria.cs" />
     <Compile Include="Criteria\SearchQuery.cs" />
     <Compile Include="EmployeeContext.cs" />
+    <Compile Include="EmployeeContextInitializer.cs" />
     <Compile Include="Entities\EmployeeEntity.cs" />
+    <Compile Include="Entities\PermissionKeyEntity.cs" />
     <Compile Include="Entities\UserEntity.cs" />
     <Compile Include="Entities\UserGroupEntity.cs" />
+    <Compile Include="Entities\UserGroupPermissionEntity.cs" />
     <Compile Include="Migrations\201405141142209_Initial.cs" />
     <Compile Include="Migrations\201405141142209_Initial.Designer.cs">
       <DependentUpon>201405141142209_Initial.cs</DependentUpon>
@@ -81,6 +84,10 @@
     <Compile Include="Migrations\201405200617089_AddUser.cs" />
     <Compile Include="Migrations\201405200617089_AddUser.Designer.cs">
       <DependentUpon>201405200617089_AddUser.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201406211014297_AddPermission.cs" />
+    <Compile Include="Migrations\201406211014297_AddPermission.Designer.cs">
+      <DependentUpon>201406211014297_AddPermission.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
@@ -105,6 +112,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201405200617089_AddUser.resx">
       <DependentUpon>201405200617089_AddUser.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201406211014297_AddPermission.resx">
+      <DependentUpon>201406211014297_AddPermission.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>

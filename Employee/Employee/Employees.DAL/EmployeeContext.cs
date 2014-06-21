@@ -9,6 +9,13 @@ namespace Employees.DAL
 
         public DbSet<UserGroupEntity> UserGroups { get; set; }
         public DbSet<UserEntity> Users { get; set; }
+        public DbSet<PermissionKeyEntity> PermissionKeis { get; set; }
+
+
+        static EmployeeContext()
+        {
+            Database.SetInitializer<EmployeeContext>(new EmployeeContextInitializer());
+        }
 
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)

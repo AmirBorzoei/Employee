@@ -146,9 +146,11 @@ namespace Employees
 
             Mapper.CreateMap<UserGroupEntity, UserGroup>()
                 .ForMember(d => d.IsNotifying, m => m.Ignore())
-                .ForMember(d => d.State, m => m.UseValue(ModelStates.Unchanged));
+                .ForMember(d => d.State, m => m.UseValue(ModelStates.Unchanged))
+                .ForMember(d => d.UserGroupPermissions, m => m.Ignore());
             Mapper.CreateMap<UserGroup, UserGroupEntity>()
-                .ForMember(d => d.Users, m => m.Ignore());
+                .ForMember(d => d.Users, m => m.Ignore())
+                .ForMember(d => d.UserGroupPermissions, m => m.Ignore());
 
             Mapper.CreateMap<UserEntity, User>()
                 .ForMember(d => d.IsNotifying, m => m.Ignore())

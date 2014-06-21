@@ -82,7 +82,7 @@ namespace Employees.Shared.Models
 
         public string UserGroupsDisplay
         {
-            get { return string.Join(";", _userGroups); }
+            get { return string.Join(";", _userGroups.OrderBy(ug => ug.UserGroupName).ThenBy(ug => ug.UserGroupId)); }
         }
     }
 }

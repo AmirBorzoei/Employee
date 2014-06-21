@@ -11,32 +11,65 @@ namespace Employees.DAL.Repositories
 {
     public class UserGroupRepository : GenericRepository<UserGroupEntity>
     {
-        public UserGroupRepository(DbContext dbContext) : base(dbContext)
+        public UserGroup GetUserGroupByID(long id)
         {
+            var context = GetDbContext();
+
+            return Mapper.Map<UserGroup>(base.GetByID(context, id));
         }
+
 
         public List<UserGroup> GetUserGroups(SearchQuery<UserGroupEntity> searchQuery = null)
         {
+            var context = GetDbContext();
+
             if (searchQuery == null)
                 searchQuery = new SearchQuery<UserGroupEntity>();
+            if (searchQuery.SortCriterias.Count == 0)
+            {
+                searchQuery.AddSortCriteria(new ExpressionSortCriteria<UserGroupEntity, string>(ug => ug.UserGroupName, SortDirection.Ascending));
+                searchQuery.AddSortCriteria(new ExpressionSortCriteria<UserGroupEntity, long>(ug => ug.UserGroupId, SortDirection.Ascending));
+            }
 
-            searchQuery.AddSortCriteria(new ExpressionSortCriteria<UserGroupEntity, string>(ug => ug.UserGroupName, SortDirection.Ascending));
-            searchQuery.AddSortCriteria(new ExpressionSortCriteria<UserGroupEntity, long>(ug => ug.UserGroupId, SortDirection.Ascending));
-
-            var userGroupEntities = base.Get(searchQuery);
+            var userGroupEntities = base.Get(context, searchQuery);
             return Mapper.Map<List<UserGroupEntity>, List<UserGroup>>(userGroupEntities);
         }
 
         public UserGroup UpdateOrInsert(UserGroup userGroup)
         {
-            var userGroupEntity = Mapper.Map<UserGroupEntity>(userGroup);
+            var context = GetDbContext();
+
+            UserGroupEntity returnEntity = null;
 
             if (userGroup.State == ModelStates.New)
-                userGroupEntity = Insert(userGroupEntity);
-            else if (userGroup.State == ModelStates.Modified)
-                userGroupEntity = Update(userGroupEntity);
+            {
+                var userGroupEntity = Mapper.Map<UserGroupEntity>(userGroup);
 
-            return Mapper.Map<UserGroup>(userGroupEntity);
+                returnEntity = Insert(context, userGroupEntity);
+
+                context.SaveChanges();
+            }
+            else if (userGroup.State == ModelStates.Modified)
+            {
+                var userGroupEntity = GetByID(context, userGroup.UserGroupId);
+
+                Mapper.Map(userGroup, userGroupEntity);
+
+                Update(context, userGroupEntity);
+
+                context.SaveChanges();
+
+                returnEntity = GetByID(context, userGroupEntity.UserGroupId);
+            }
+
+            return Mapper.Map<UserGroup>(returnEntity);
+        }
+
+        public void DeleteUserGroup(long id)
+        {
+            var context = GetDbContext();
+            Delete(context, id);
+            context.SaveChanges();
         }
     }
 }

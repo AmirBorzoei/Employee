@@ -8,26 +8,21 @@ namespace Employees.DAL.Repositories
         UserGroupRepository UserGroupRepository { get; }
         UserRepository UserRepository { get; }
         GenericRepository<EmployeeEntity> EmployeeRepository { get; }
-
-        void SaveChanges();
     }
 
-    public class EmployeeUnitOfWork : IEmployeeUnitOfWork, IDisposable
+    public class EmployeeUnitOfWork : IEmployeeUnitOfWork
     {
-        private readonly EmployeeContext _context;
         private readonly GenericRepository<EmployeeEntity> _employeeRepository;
         private readonly UserGroupRepository _userGroupRepository;
         private readonly UserRepository _userRepository;
         private bool _disposed;
 
 
-        public EmployeeUnitOfWork(EmployeeContext context)
+        public EmployeeUnitOfWork()
         {
-            _context = context;
-
             //_employeeRepository = new GenericRepository<EmployeeEntity>();
-            _userGroupRepository = new UserGroupRepository(_context);
-            _userRepository = new UserRepository(_context, _userGroupRepository);
+            _userGroupRepository = new UserGroupRepository();
+            _userRepository = new UserRepository(_userGroupRepository);
         }
 
 
@@ -44,30 +39,6 @@ namespace Employees.DAL.Repositories
         public UserRepository UserRepository
         {
             get { return _userRepository; }
-        }
-
-        public void SaveChanges()
-        {
-            _context.SaveChanges();
-        }
-
-
-        public void Dispose()
-        {
-            Dispose(true);
-            GC.SuppressFinalize(this);
-        }
-
-        protected virtual void Dispose(bool disposing)
-        {
-            if (!_disposed)
-            {
-                if (disposing)
-                {
-                    _context.Dispose();
-                }
-            }
-            _disposed = true;
         }
     }
 }

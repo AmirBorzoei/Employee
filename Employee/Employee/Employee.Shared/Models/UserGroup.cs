@@ -1,4 +1,5 @@
 ﻿using System;
+using Caliburn.Micro;
 using Employees.Shared.Constants;
 
 namespace Employees.Shared.Models
@@ -7,6 +8,13 @@ namespace Employees.Shared.Models
     {
         private long _userGroupId;
         private string _userGroupName;
+
+
+        public UserGroup()
+        {
+            UserGroupPermissions = new BindableCollection<UserGroupPermission>();
+        }
+
 
         public long UserGroupId
         {
@@ -27,6 +35,8 @@ namespace Employees.Shared.Models
                 NotifyOfPropertyChange(() => UserGroupName);
             }
         }
+
+        public BindableCollection<UserGroupPermission> UserGroupPermissions { get; private set; }
 
         public override string DisplayName
         {

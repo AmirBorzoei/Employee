@@ -10,18 +10,10 @@ namespace Employees.DAL.Repositories
 {
     public class GenericRepository<TEntity> where TEntity : class
     {
-        protected readonly DbContext _dbContext;
-
-
-        protected GenericRepository(DbContext dbContext)
+        protected virtual List<TEntity> Get(EmployeeContext context, SearchQuery<TEntity> searchQuery = null)
         {
-            _dbContext = dbContext;
-        }
+            var dbSet = GetDbSet(context);
 
-
-        protected virtual List<TEntity> Get(SearchQuery<TEntity> searchQuery = null)
-        {
-            var dbSet = GetDbSet();
             IQueryable<TEntity> query = dbSet;
 
             if (searchQuery != null && searchQuery.Filters != null && searchQuery.Filters.Count > 0)
@@ -90,73 +82,57 @@ namespace Employees.DAL.Repositories
         //    }
         //}
 
-        public virtual TEntity GetByID(object id)
+        internal virtual TEntity GetByID(EmployeeContext context, object id)
         {
-            var dbSet = GetDbSet();
+            var dbSet = GetDbSet(context);
             return dbSet.Find(id);
         }
 
-        protected virtual TEntity Insert(TEntity entity)
+        protected virtual TEntity Insert(EmployeeContext context, TEntity entity)
         {
-            var context = GetDbContext();
             var dbSet = GetDbSet(context);
             var insertedTEntity = dbSet.Add(entity);
-
-            context.SaveChanges();
-
             return insertedTEntity;
         }
 
-        public virtual void Delete(object id)
+        protected virtual void Delete(EmployeeContext context, object id)
         {
-            var dbSet = GetDbSet();
+            var dbSet = GetDbSet(context);
             var entityToDelete = dbSet.Find(id);
-            Delete(entityToDelete);
+            Delete(context, entityToDelete);
         }
 
-        protected virtual void Delete(TEntity entityToDelete)
+        protected virtual void Delete(EmployeeContext context, TEntity entityToDelete)
         {
-            var context = GetDbContext();
             var dbSet = GetDbSet(context);
+
             if (context.Entry(entityToDelete).State == EntityState.Detached)
             {
                 dbSet.Attach(entityToDelete);
             }
             dbSet.Remove(entityToDelete);
-
-            context.SaveChanges();
         }
 
-        protected virtual TEntity Update(TEntity entityToUpdate)
+        protected virtual TEntity Update(EmployeeContext context, TEntity entityToUpdate)
         {
-            var context = GetDbContext();
+            if (context == null)
+                context = GetDbContext();
             var dbSet = GetDbSet(context);
+
             dbSet.Attach(entityToUpdate);
             context.Entry(entityToUpdate).State = EntityState.Modified;
-
-            context.SaveChanges();
-
-            context.Entry(entityToUpdate).Reload();
-
+            
             return entityToUpdate;
         }
 
 
-        private DbContext GetDbContext()
+        protected EmployeeContext GetDbContext()
         {
-            //var context = IoC.Get<EmployeeContext>();
-            //return context;
-
-            return _dbContext;
+            var context = IoC.Get<EmployeeContext>();
+            return context;
         }
-
-        protected DbSet<TEntity> GetDbSet()
-        {
-            var context = GetDbContext();
-            return GetDbSet(context);
-        }
-
-        private DbSet<TEntity> GetDbSet(DbContext context)
+        
+        protected DbSet<TEntity> GetDbSet(EmployeeContext context)
         {
             var dbSet = context.Set<TEntity>();
             return dbSet;

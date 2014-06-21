@@ -1,6 +1,4 @@
-﻿using Employees.DAL;
-using Employees.DAL.Entities;
-using Employees.DAL.Repositories;
+﻿using Employees.DAL.Repositories;
 using Employees.Shared.Constants;
 using Employees.Shared.Interfaces;
 using Employees.Shared.Models;
@@ -33,18 +31,14 @@ namespace Employees.Administration.ViewModels
         {
             if (CurrentObject == null) return;
 
-            //var userGroupEntity = _employeeUnitOfWork.UserGroupRepository.GetByID(CurrentObject.UserGroupId);
-
             CurrentObject = _employeeUnitOfWork.UserGroupRepository.UpdateOrInsert(CurrentObject);
-
-            _employeeUnitOfWork.SaveChanges();
         }
 
         public void Reload()
         {
             if (CurrentObject == null || CurrentObject.State == ModelStates.New) return;
 
-            //CurrentObject = Mapper.Map<UserGroup>(_employeeUnitOfWork.UserGroupRepository.GetByID(CurrentObject.UserGroupId));
+            CurrentObject = _employeeUnitOfWork.UserGroupRepository.GetUserGroupByID(CurrentObject.UserGroupId);
         }
     }
 }

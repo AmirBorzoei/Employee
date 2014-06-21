@@ -38,7 +38,7 @@ namespace Employees.Administration.ViewModels
         {
             base.OnViewLoaded(view);
             
-            LoadUserGroups();
+            Reload();
         }
 
 
@@ -46,7 +46,8 @@ namespace Employees.Administration.ViewModels
         {
             foreach (var user in Users)
             {
-                _employeeUnitOfWork.UserRepository.UpdateOrInsert(user);
+                if (user.IsDirty)
+                    _employeeUnitOfWork.UserRepository.UpdateOrInsert(user);
             }
 
             LoadUsers();

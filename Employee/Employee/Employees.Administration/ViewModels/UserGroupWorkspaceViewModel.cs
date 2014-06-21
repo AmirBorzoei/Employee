@@ -98,11 +98,13 @@ namespace Employees.Administration.ViewModels
             var userGroup = editGridCellData.RowData.Row as UserGroup;
             if (userGroup == null) return;
 
+            userGroup = _employeeUnitOfWork.UserGroupRepository.GetUserGroupByID(userGroup.UserGroupId);
+
             var item = ActiveItem as UserGroupViewModel;
             if (item != null)
-                item.CurrentObject = userGroup.GetCopy(false);
+                item.CurrentObject = userGroup;
             else
-                AddNewTab(userGroup.GetCopy(false));
+                AddNewTab(userGroup);
         }
 
         public void OpenUserGroupNewTab(EditGridCellData editGridCellData)
@@ -122,15 +124,13 @@ namespace Employees.Administration.ViewModels
             var userGroup = editGridCellData.RowData.Row as UserGroup;
             if (userGroup == null) return;
 
-            _employeeUnitOfWork.UserGroupRepository.Delete(userGroup.UserGroupId);
+            _employeeUnitOfWork.UserGroupRepository.DeleteUserGroup(userGroup.UserGroupId);
 
             var openDeletedItem = Items.Cast<UserGroupViewModel>().FirstOrDefault(i => i.CurrentObject != null &&
                                                                                        i.CurrentObject.UserGroupId == userGroup.UserGroupId);
             if (openDeletedItem != null)
                 Items.Remove(openDeletedItem);
-
-            _employeeUnitOfWork.SaveChanges();
-
+            
             Reload();
         }
 

@@ -12,5 +12,6 @@ namespace Employees.DAL.Entities
 
         public string UserGroupName { get; set; }
         public List<UserEntity> Users { get; set; }
+        public List<UserGroupPermissionEntity> UserGroupPermissions { get; set; }
     }
 }

@@ -60,6 +60,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Constants\ModelStates.cs" />
+    <Compile Include="Constants\PermissionAccessTypes.cs" />
     <Compile Include="Converters\ObjectListToUserGroupListConverter.cs" />
     <Compile Include="Converters\TestConverter.cs" />
     <Compile Include="Events\ActiveItemChangedMessage.cs" />
@@ -69,8 +70,10 @@
     <Compile Include="Interfaces\ISupportSave.cs" />
     <Compile Include="Models\BaseModel.cs" />
     <Compile Include="Models\Employee.cs" />
+    <Compile Include="Models\PermissionKey.cs" />
     <Compile Include="Models\User.cs" />
     <Compile Include="Models\UserGroup.cs" />
+    <Compile Include="Models\UserGroupPermission.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
