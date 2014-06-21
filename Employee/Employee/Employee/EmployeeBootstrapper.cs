@@ -13,6 +13,7 @@ using Employees.DAL.Repositories;
 using Employees.Personally.ViewModels;
 using Employees.Shared.Constants;
 using Employees.Shared.Models;
+using Employees.Shared.Permission;
 using Employees.ViewModels;
 
 namespace Employees
@@ -153,9 +154,11 @@ namespace Employees
                 .ForMember(d => d.UserGroupPermissions, m => m.Ignore());
 
             Mapper.CreateMap<UserEntity, User>()
-                .ForMember(d => d.IsNotifying, m => m.Ignore())
-                .ForMember(d => d.State, m => m.UseValue(ModelStates.Unchanged));
-            Mapper.CreateMap<User, UserEntity>();
+                  .ForMember(d => d.IsNotifying, m => m.Ignore())
+                  .ForMember(d => d.Password, m => m.MapFrom(ue => Encryption.Decrypt(ue.Password)))
+                  .ForMember(d => d.State, m => m.UseValue(ModelStates.Unchanged));
+            Mapper.CreateMap<User, UserEntity>()
+                  .ForMember(d => d.Password, m => m.MapFrom(u => Encryption.Encrypt(u.Password)));
 
 
             Mapper.AssertConfigurationIsValid();

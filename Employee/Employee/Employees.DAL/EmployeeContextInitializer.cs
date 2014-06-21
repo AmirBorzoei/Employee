@@ -3,7 +3,7 @@ using Employees.DAL.Entities;
 
 namespace Employees.DAL
 {
-    public class EmployeeContextInitializer : DropCreateDatabaseAlways<EmployeeContext>
+    public class EmployeeContextInitializer : DropCreateDatabaseIfModelChanges<EmployeeContext>
     {
         protected override void Seed(EmployeeContext context)
         {

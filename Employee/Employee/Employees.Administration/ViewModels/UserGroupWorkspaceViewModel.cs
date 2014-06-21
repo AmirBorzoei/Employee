@@ -114,6 +114,8 @@ namespace Employees.Administration.ViewModels
             var userGroup = editGridCellData.RowData.Row as UserGroup;
             if (userGroup == null) return;
 
+            userGroup = _employeeUnitOfWork.UserGroupRepository.GetUserGroupByID(userGroup.UserGroupId);
+
             AddNewTab(userGroup.GetCopy(false));
         }
 

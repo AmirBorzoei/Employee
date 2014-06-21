@@ -13,10 +13,12 @@ namespace Employees.DAL.Repositories
     {
         private readonly UserGroupRepository _userGroupRepository;
 
+
         public UserRepository(UserGroupRepository userGroupRepository)
         {
             _userGroupRepository = userGroupRepository;
         }
+
 
         public List<User> GetUsers(SearchQuery<UserEntity> searchQuery = null)
         {
