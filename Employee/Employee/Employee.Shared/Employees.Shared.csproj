@@ -35,6 +35,10 @@
     <Reference Include="Caliburn.Micro">
       <HintPath>..\packages\Caliburn.Micro.1.5.2\lib\net45\Caliburn.Micro.dll</HintPath>
     </Reference>
+    <Reference Include="DevExpress.Xpf.Core.v13.2, Version=13.2.5.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Lib\DevExpress\DevExpress.Xpf.Core.v13.2.dll</HintPath>
+    </Reference>
     <Reference Include="DevExpress.Xpf.Docking.v13.2">
       <HintPath>..\..\Lib\DevExpress\DevExpress.Xpf.Docking.v13.2.dll</HintPath>
     </Reference>
@@ -42,6 +46,7 @@
       <HintPath>..\..\Lib\DevExpress\DevExpress.Xpf.Layout.v13.2.Core.dll</HintPath>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Data" />
     <Reference Include="System.Security" />
     <Reference Include="System.Windows.Interactivity">
@@ -62,6 +67,7 @@
   <ItemGroup>
     <Compile Include="Constants\ModelStates.cs" />
     <Compile Include="Constants\PermissionAccessTypes.cs" />
+    <Compile Include="Converters\EnumDescriptionConverter.cs" />
     <Compile Include="Converters\ObjectListToUserGroupListConverter.cs" />
     <Compile Include="Converters\TestConverter.cs" />
     <Compile Include="Events\ActiveItemChangedMessage.cs" />
