@@ -105,6 +105,7 @@
     </Compile>
     <Compile Include="Repositories\EmployeeUnitOfWork.cs" />
     <Compile Include="Repositories\GenericRepository.cs" />
+    <Compile Include="Repositories\PermissionKeyRepository.cs" />
     <Compile Include="Repositories\UserGroupRepository.cs" />
     <Compile Include="Repositories\UserRepository.cs" />
     <EmbeddedResource Include="Migrations\201405141142209_Initial.resx">

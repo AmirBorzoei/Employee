@@ -8,6 +8,8 @@ namespace Employees.Shared.Models
         private PermissionKey _permissionKey;
         private UserGroup _userGroup;
         private long _userGroupPermissionId;
+        private long _treeId;
+        private long _treeParentId;
 
 
         public long UserGroupPermissionId
@@ -17,6 +19,26 @@ namespace Employees.Shared.Models
             {
                 _userGroupPermissionId = value;
                 NotifyOfPropertyChange(() => UserGroupPermissionId);
+            }
+        }
+
+        public long TreeId
+        {
+            get { return _treeId; }
+            set
+            {
+                _treeId = value;
+                NotifyOfPropertyChange(() => TreeId);
+            }
+        }
+
+        public long TreeParentId
+        {
+            get { return _treeParentId; }
+            set
+            {
+                _treeParentId = value;
+                NotifyOfPropertyChange(() => TreeParentId);
             }
         }
 

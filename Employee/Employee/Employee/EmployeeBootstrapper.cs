@@ -125,6 +125,11 @@ namespace Employees
 
             _container.PerRequest<EmployeeContext, EmployeeContext>();
             _container.PerRequest<IEmployeeUnitOfWork, EmployeeUnitOfWork>();
+            _container.PerRequest<GenericRepository<EmployeeEntity>, GenericRepository<EmployeeEntity>>();
+            _container.PerRequest<UserGroupRepository, UserGroupRepository>();
+            _container.PerRequest<UserRepository, UserRepository>();
+            _container.PerRequest<PermissionKeyRepository, PermissionKeyRepository>();
+
             //_container.PerRequest<DialogViewModel, DialogViewModel>();
             //_container.AllTypesOf<IScreen>(Assembly.GetAssembly(typeof (EmployeeInfoViewModel)));
 
@@ -154,11 +159,15 @@ namespace Employees
                 .ForMember(d => d.UserGroupPermissions, m => m.Ignore());
 
             Mapper.CreateMap<UserEntity, User>()
-                  .ForMember(d => d.IsNotifying, m => m.Ignore())
-                  .ForMember(d => d.Password, m => m.MapFrom(ue => Encryption.Decrypt(ue.Password)))
-                  .ForMember(d => d.State, m => m.UseValue(ModelStates.Unchanged));
+                .ForMember(d => d.IsNotifying, m => m.Ignore())
+                .ForMember(d => d.Password, m => m.MapFrom(ue => Encryption.Decrypt(ue.Password)))
+                .ForMember(d => d.State, m => m.UseValue(ModelStates.Unchanged));
             Mapper.CreateMap<User, UserEntity>()
-                  .ForMember(d => d.Password, m => m.MapFrom(u => Encryption.Encrypt(u.Password)));
+                .ForMember(d => d.Password, m => m.MapFrom(u => Encryption.Encrypt(u.Password)));
+
+            Mapper.CreateMap<PermissionKeyEntity, PermissionKey>()
+               .ForMember(d => d.IsNotifying, m => m.Ignore())
+               .ForMember(d => d.State, m => m.UseValue(ModelStates.Unchanged));
 
 
             Mapper.AssertConfigurationIsValid();

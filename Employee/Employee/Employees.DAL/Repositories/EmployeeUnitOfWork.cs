@@ -1,4 +1,3 @@
-using System;
 using Employees.DAL.Entities;
 
 namespace Employees.DAL.Repositories
@@ -7,6 +6,8 @@ namespace Employees.DAL.Repositories
     {
         UserGroupRepository UserGroupRepository { get; }
         UserRepository UserRepository { get; }
+        PermissionKeyRepository PermissionKeyRepository { get; }
+
         GenericRepository<EmployeeEntity> EmployeeRepository { get; }
     }
 
@@ -15,14 +16,18 @@ namespace Employees.DAL.Repositories
         private readonly GenericRepository<EmployeeEntity> _employeeRepository;
         private readonly UserGroupRepository _userGroupRepository;
         private readonly UserRepository _userRepository;
-        private bool _disposed;
+        private readonly PermissionKeyRepository _permissionKeyRepository;
 
 
-        public EmployeeUnitOfWork()
+        public EmployeeUnitOfWork(GenericRepository<EmployeeEntity> employeeRepository,
+            UserGroupRepository userGroupRepository,
+            UserRepository userRepository,
+            PermissionKeyRepository permissionKeyRepository)
         {
-            //_employeeRepository = new GenericRepository<EmployeeEntity>();
-            _userGroupRepository = new UserGroupRepository();
-            _userRepository = new UserRepository(_userGroupRepository);
+            _employeeRepository = employeeRepository;
+            _userGroupRepository = userGroupRepository;
+            _userRepository = userRepository;
+            _permissionKeyRepository = permissionKeyRepository;
         }
 
 
@@ -39,6 +44,11 @@ namespace Employees.DAL.Repositories
         public UserRepository UserRepository
         {
             get { return _userRepository; }
+        }
+
+        public PermissionKeyRepository PermissionKeyRepository
+        {
+            get { return _permissionKeyRepository; }
         }
     }
 }

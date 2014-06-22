@@ -24,14 +24,21 @@ namespace Employees.Shared.Permission
         /// is a null reference.</exception>
         public static string Encrypt(string plainText)
         {
-            if (plainText == null) throw new ArgumentNullException("plainText");
+            try
+            {
+                if (plainText == null) throw new ArgumentNullException("plainText");
 
-            //encrypt data
-            var data = Encoding.UTF8.GetBytes(plainText);
-            byte[] encrypted = ProtectedData.Protect(data, null, DataProtectionScope.CurrentUser);
+                //encrypt data
+                var data = Encoding.UTF8.GetBytes(plainText);
+                byte[] encrypted = ProtectedData.Protect(data, null, DataProtectionScope.CurrentUser);
 
-            //return as base64 string
-            return Convert.ToBase64String(encrypted);
+                //return as base64 string
+                return Convert.ToBase64String(encrypted);
+            }
+            catch
+            {
+                return plainText;
+            }
         }
 
         /// <summary>
@@ -48,14 +55,21 @@ namespace Employees.Shared.Permission
         /// is a null reference.</exception>
         public static string Decrypt(string cipher)
         {
-            if (cipher == null) throw new ArgumentNullException("cipher");
+            try
+            {
+                if (cipher == null) throw new ArgumentNullException("cipher");
 
-            //parse base64 string
-            byte[] data = Convert.FromBase64String(cipher);
+                //parse base64 string
+                byte[] data = Convert.FromBase64String(cipher);
 
-            //decrypt data
-            byte[] decrypted = ProtectedData.Unprotect(data, null, DataProtectionScope.CurrentUser);
-            return Encoding.UTF8.GetString(decrypted);
+                //decrypt data
+                byte[] decrypted = ProtectedData.Unprotect(data, null, DataProtectionScope.CurrentUser);
+                return Encoding.UTF8.GetString(decrypted);
+            }
+            catch
+            {
+                return cipher;
+            }
         }
     }
 }

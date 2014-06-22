@@ -18,7 +18,6 @@ namespace Employees.DAL.Repositories
             return Mapper.Map<UserGroup>(base.GetByID(context, id));
         }
 
-
         public List<UserGroup> GetUserGroups(SearchQuery<UserGroupEntity> searchQuery = null)
         {
             var context = GetDbContext();
