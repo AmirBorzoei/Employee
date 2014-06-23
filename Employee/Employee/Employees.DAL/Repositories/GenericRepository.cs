@@ -115,8 +115,6 @@ namespace Employees.DAL.Repositories
 
         protected virtual TEntity Update(EmployeeContext context, TEntity entityToUpdate)
         {
-            if (context == null)
-                context = GetDbContext();
             var dbSet = GetDbSet(context);
 
             dbSet.Attach(entityToUpdate);

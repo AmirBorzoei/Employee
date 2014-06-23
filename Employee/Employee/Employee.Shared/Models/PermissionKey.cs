@@ -58,5 +58,11 @@
                 NotifyOfPropertyChange(() => PermissionKeyLabel);
             }
         }
+
+
+        public override string DisplayName
+        {
+            get { return PermissionKeyName; }
+        }
     }
 }

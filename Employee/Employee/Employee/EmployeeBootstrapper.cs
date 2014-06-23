@@ -152,11 +152,9 @@ namespace Employees
 
             Mapper.CreateMap<UserGroupEntity, UserGroup>()
                 .ForMember(d => d.IsNotifying, m => m.Ignore())
-                .ForMember(d => d.State, m => m.UseValue(ModelStates.Unchanged))
-                .ForMember(d => d.UserGroupPermissions, m => m.Ignore());
+                .ForMember(d => d.State, m => m.UseValue(ModelStates.Unchanged));
             Mapper.CreateMap<UserGroup, UserGroupEntity>()
-                .ForMember(d => d.Users, m => m.Ignore())
-                .ForMember(d => d.UserGroupPermissions, m => m.Ignore());
+                .ForMember(d => d.Users, m => m.Ignore());
 
             Mapper.CreateMap<UserEntity, User>()
                 .ForMember(d => d.IsNotifying, m => m.Ignore())
@@ -166,8 +164,20 @@ namespace Employees
                 .ForMember(d => d.Password, m => m.MapFrom(u => Encryption.Encrypt(u.Password)));
 
             Mapper.CreateMap<PermissionKeyEntity, PermissionKey>()
-               .ForMember(d => d.IsNotifying, m => m.Ignore())
-               .ForMember(d => d.State, m => m.UseValue(ModelStates.Unchanged));
+                .ForMember(d => d.IsNotifying, m => m.Ignore())
+                .ForMember(d => d.State, m => m.UseValue(ModelStates.Unchanged));
+            Mapper.CreateMap<PermissionKey, PermissionKeyEntity>();
+
+            Mapper.CreateMap<UserGroupPermissionEntity, UserGroupPermission>()
+                .ForMember(d => d.IsNotifying, m => m.Ignore())
+                .ForMember(d => d.State, m => m.UseValue(ModelStates.Unchanged))
+                .ForMember(d => d.TreeId, m => m.Ignore())
+                .ForMember(d => d.TreeParentId, m => m.Ignore())
+                .ForMember(d => d.UserGroup, m => m.MapFrom(s => s.UserGroupEntity))
+                .ForMember(d => d.PermissionKey, m => m.MapFrom(s => s.PermissionKeyEntity));
+            Mapper.CreateMap<UserGroupPermission, UserGroupPermissionEntity>()
+                .ForMember(d => d.UserGroupEntity, m => m.MapFrom(s => s.UserGroup))
+                .ForMember(d => d.PermissionKeyEntity, m => m.MapFrom(s => s.PermissionKey));
 
 
             Mapper.AssertConfigurationIsValid();

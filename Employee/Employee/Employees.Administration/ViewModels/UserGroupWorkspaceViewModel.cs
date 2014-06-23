@@ -98,7 +98,7 @@ namespace Employees.Administration.ViewModels
             var userGroup = editGridCellData.RowData.Row as UserGroup;
             if (userGroup == null) return;
 
-            userGroup = _employeeUnitOfWork.UserGroupRepository.GetUserGroupByID(userGroup.UserGroupId);
+            userGroup = _employeeUnitOfWork.UserGroupRepository.GetUserGroupFullByID(userGroup.UserGroupId);
 
             var item = ActiveItem as UserGroupViewModel;
             if (item != null)
@@ -114,7 +114,7 @@ namespace Employees.Administration.ViewModels
             var userGroup = editGridCellData.RowData.Row as UserGroup;
             if (userGroup == null) return;
 
-            userGroup = _employeeUnitOfWork.UserGroupRepository.GetUserGroupByID(userGroup.UserGroupId);
+            userGroup = _employeeUnitOfWork.UserGroupRepository.GetUserGroupFullByID(userGroup.UserGroupId);
 
             AddNewTab(userGroup.GetCopy(false));
         }

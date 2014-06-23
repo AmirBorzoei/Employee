@@ -55,7 +55,7 @@ namespace Employees.Administration.ViewModels
         {
             if (CurrentObject == null || CurrentObject.State == ModelStates.New) return;
 
-            CurrentObject = _employeeUnitOfWork.UserGroupRepository.GetUserGroupByID(CurrentObject.UserGroupId);
+            CurrentObject = _employeeUnitOfWork.UserGroupRepository.GetUserGroupFullByID(CurrentObject.UserGroupId);
         }
 
 
@@ -92,8 +92,21 @@ namespace Employees.Administration.ViewModels
 
             foreach (var userGroupPermission in UserGroupPermissions)
             {
-                var orgUserGroupPermission = CurrentObject.UserGroupPermissions.FirstOrDefault(ugp => ugp.PermissionKey.PermissionKeyId == userGroupPermission.PermissionKey.PermissionKeyId);
-                orgUserGroupPermission.PermissionAccessType = userGroupPermission.PermissionAccessType;
+                var originalUserGroupPermission = CurrentObject.UserGroupPermissions.FirstOrDefault(
+                    ugp => ugp.PermissionKey.PermissionKeyId == userGroupPermission.PermissionKey.PermissionKeyId);
+
+                if (originalUserGroupPermission == null && userGroupPermission.PermissionAccessType != PermissionAccessTypes.None)
+                {
+                    CurrentObject.UserGroupPermissions.Add(userGroupPermission);
+                }
+                else if (originalUserGroupPermission != null && userGroupPermission.PermissionAccessType == PermissionAccessTypes.None)
+                {
+                    CurrentObject.UserGroupPermissions.Remove(originalUserGroupPermission);
+                }
+                else if (originalUserGroupPermission != null && userGroupPermission.PermissionAccessType != PermissionAccessTypes.None)
+                {
+                    originalUserGroupPermission.PermissionAccessType = userGroupPermission.PermissionAccessType;
+                }
             }
         }
     }
