@@ -61,7 +61,7 @@
                             <TextBlock Text="نام گروه"
                                        Style="{StaticResource SearchFieldCaption}" />
                             <dxe:TextEdit EditValue="{Binding CurrentUserGroupSearch.UserGroupName, UpdateSourceTrigger=PropertyChanged}"
-                                          Width="350" />
+                                          Width="400" />
                         </StackPanel>
                         <dxdo:LayoutControlItem>
                             <Button x:Name="SearchUserGroup"

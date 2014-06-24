@@ -4,7 +4,6 @@
              xmlns:dxe="http://schemas.devexpress.com/winfx/2008/xaml/editors"
              xmlns:dxlc="http://schemas.devexpress.com/winfx/2008/xaml/layoutcontrol"
              xmlns:dxg="http://schemas.devexpress.com/winfx/2008/xaml/grid"
-             xmlns:System="clr-namespace:System;assembly=mscorlib"
              xmlns:Constants="clr-namespace:Employees.Shared.Constants;assembly=Employees.Shared" >
 
     <dxlc:LayoutControl>
@@ -13,10 +12,10 @@
                 <dxlc:LayoutGroup Orientation="Vertical"
                                   ItemSpace="20" >
                     <dxlc:LayoutItem Label="نام گروه"
-                                     HorizontalAlignment="Left"
-                                     Width="500" >
+                                     HorizontalAlignment="Left" >
                         <dxe:TextEdit x:Name="CurrentObject_UserGroupName"
-                                      EditValue="{Binding CurrentObject.UserGroupName}" />
+                                      EditValue="{Binding CurrentObject.UserGroupName}"
+                                      Width="400" />
                     </dxlc:LayoutItem>
 
                     <dxlc:LayoutGroup View="GroupBox"
