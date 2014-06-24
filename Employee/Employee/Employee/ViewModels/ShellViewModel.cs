@@ -1,4 +1,5 @@
-﻿using Caliburn.Micro;
+﻿using System.Windows;
+using Caliburn.Micro;
 using DevExpress.Xpf.Core;
 using Employees.Administration.ViewModels;
 using Employees.Personally.ViewModels;
@@ -14,18 +15,41 @@ namespace Employees.ViewModels
 
     public class ShellViewModel : WorkspaceBase, IShellViewModel
     {
+        private readonly ILoginViewModel _loginViewModel;
         private readonly IAdministrationWorkspaceViewModel _administrationWorkspaceViewModel;
         private readonly IEmployeeInfoViewModel _employeeInfoViewModel;
-        
+        private Visibility _loginViewVisibility;
+
 
         public ShellViewModel(IEventAggregator eventAggregator,
-                              IAdministrationWorkspaceViewModel administrationWorkspaceViewModel,
-                              IEmployeeInfoViewModel employeeInfoViewModel) : base(eventAggregator)
+            ILoginViewModel loginViewModel,
+            IAdministrationWorkspaceViewModel administrationWorkspaceViewModel,
+            IEmployeeInfoViewModel employeeInfoViewModel) : base(eventAggregator)
         {
+            _loginViewModel = loginViewModel;
+            _loginViewModel.UserLogined += _loginViewModel_UserLogined;
+            _loginViewModel.UserExit += _loginViewModel_UserExit;
+
             _administrationWorkspaceViewModel = administrationWorkspaceViewModel;
             _employeeInfoViewModel = employeeInfoViewModel;
 
             DisplayName = "* * *";
+        }
+
+
+        public ILoginViewModel LoginViewModel
+        {
+            get { return _loginViewModel; }
+        }
+
+        public Visibility LoginViewVisibility
+        {
+            get { return _loginViewVisibility; }
+            private set
+            {
+                _loginViewVisibility = value;
+                NotifyOfPropertyChange(() => LoginViewVisibility);
+            }
         }
 
         #region Menu Handler
@@ -34,7 +58,7 @@ namespace Employees.ViewModels
         {
             ActivateItem(null);
         }
-        
+
         public void ShowFinancial()
         {
             ActiveItem = null;
@@ -84,6 +108,7 @@ namespace Employees.ViewModels
 
         public void Logout()
         {
+            LoginViewVisibility = Visibility.Visible;
         }
 
         public void ChangeTheme()
@@ -103,5 +128,19 @@ namespace Employees.ViewModels
         }
 
         #endregion Toolbar Handler
+
+        #region Login Handler
+
+        private void _loginViewModel_UserLogined(object sender, System.EventArgs e)
+        {
+            LoginViewVisibility = Visibility.Collapsed;
+        }
+
+        private void _loginViewModel_UserExit(object sender, System.EventArgs e)
+        {
+            TryClose();
+        }
+
+        #endregion Login Handler
     }
 }

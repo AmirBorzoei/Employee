@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Reflection;
+using System.Runtime.CompilerServices;
 using System.Windows;
 using AutoMapper;
 using Caliburn.Micro;
@@ -9,6 +10,7 @@ using DevExpress.Xpf.Editors;
 using Employees.Administration.ViewModels;
 using Employees.DAL;
 using Employees.DAL.Entities;
+using Employees.DAL.Migrations;
 using Employees.DAL.Repositories;
 using Employees.Personally.ViewModels;
 using Employees.Shared.Constants;
@@ -135,6 +137,8 @@ namespace Employees
             //_container.AllTypesOf<IScreen>(Assembly.GetAssembly(typeof (EmployeeInfoViewModel)));
 
             _container.PerRequest<IShellViewModel, ShellViewModel>();
+            _container.PerRequest<ILoginViewModel, LoginViewModel>();
+            
             _container.PerRequest<IEmployeeInfoViewModel, EmployeeInfoViewModel>();
 
             _container.PerRequest<IAdministrationWorkspaceViewModel, AdministrationWorkspaceViewModel>();

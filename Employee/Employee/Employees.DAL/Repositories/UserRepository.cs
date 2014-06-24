@@ -67,6 +67,11 @@ namespace Employees.DAL.Repositories
             return Mapper.Map<User>(returnEntity);
         }
 
+        public User ValidateUser(string username, string password)
+        {
+            return new User();
+        }
+
 
         private UserEntity GetUserEntityWithUserGroupsByID(EmployeeContext context, long id)
         {
