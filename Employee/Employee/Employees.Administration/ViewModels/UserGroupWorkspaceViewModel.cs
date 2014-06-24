@@ -126,7 +126,7 @@ namespace Employees.Administration.ViewModels
             var userGroup = editGridCellData.RowData.Row as UserGroup;
             if (userGroup == null) return;
 
-            _employeeUnitOfWork.UserGroupRepository.DeleteUserGroup(userGroup.UserGroupId);
+            _employeeUnitOfWork.UserGroupRepository.DeleteUserGroupById(userGroup.UserGroupId);
 
             var openDeletedItem = Items.Cast<UserGroupViewModel>().FirstOrDefault(i => i.CurrentObject != null &&
                                                                                        i.CurrentObject.UserGroupId == userGroup.UserGroupId);

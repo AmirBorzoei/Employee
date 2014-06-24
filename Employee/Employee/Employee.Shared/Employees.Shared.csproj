@@ -65,6 +65,8 @@
     <Reference Include="PresentationFramework" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Attributes\ConsiderIsDirtyAttribute.cs" />
+    <Compile Include="Attributes\IgnoreChangeStateAttribute.cs" />
     <Compile Include="Constants\ModelStates.cs" />
     <Compile Include="Constants\PermissionAccessTypes.cs" />
     <Compile Include="Converters\EnumDescriptionConverter.cs" />

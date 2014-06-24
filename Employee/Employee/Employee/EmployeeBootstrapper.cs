@@ -129,6 +129,7 @@ namespace Employees
             _container.PerRequest<UserGroupRepository, UserGroupRepository>();
             _container.PerRequest<UserRepository, UserRepository>();
             _container.PerRequest<PermissionKeyRepository, PermissionKeyRepository>();
+            _container.PerRequest<UserGroupPermissionRepository, UserGroupPermissionRepository>();
 
             //_container.PerRequest<DialogViewModel, DialogViewModel>();
             //_container.AllTypesOf<IScreen>(Assembly.GetAssembly(typeof (EmployeeInfoViewModel)));
@@ -154,7 +155,8 @@ namespace Employees
                 .ForMember(d => d.IsNotifying, m => m.Ignore())
                 .ForMember(d => d.State, m => m.UseValue(ModelStates.Unchanged));
             Mapper.CreateMap<UserGroup, UserGroupEntity>()
-                .ForMember(d => d.Users, m => m.Ignore());
+                .ForMember(d => d.Users, m => m.Ignore())
+                .ForMember(d => d.UserGroupPermissions, m => m.Ignore());
 
             Mapper.CreateMap<UserEntity, User>()
                 .ForMember(d => d.IsNotifying, m => m.Ignore())

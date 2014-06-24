@@ -48,6 +48,9 @@ namespace Employees.Administration.ViewModels
             if (CurrentObject == null) return;
 
             RefreshUserGroupPermissionsOnCurrentObject();
+
+            if (!CurrentObject.IsDirty) return;
+
             CurrentObject = _employeeUnitOfWork.UserGroupRepository.UpdateOrInsert(CurrentObject);
         }
 
@@ -99,11 +102,7 @@ namespace Employees.Administration.ViewModels
                 {
                     CurrentObject.UserGroupPermissions.Add(userGroupPermission);
                 }
-                else if (originalUserGroupPermission != null && userGroupPermission.PermissionAccessType == PermissionAccessTypes.None)
-                {
-                    CurrentObject.UserGroupPermissions.Remove(originalUserGroupPermission);
-                }
-                else if (originalUserGroupPermission != null && userGroupPermission.PermissionAccessType != PermissionAccessTypes.None)
+                else if (originalUserGroupPermission != null)
                 {
                     originalUserGroupPermission.PermissionAccessType = userGroupPermission.PermissionAccessType;
                 }

@@ -13,11 +13,14 @@ namespace Employees.DAL.Repositories
     public class UserGroupRepository : GenericRepository<UserGroupEntity>
     {
         private readonly PermissionKeyRepository _permissionKeyRepository;
+        private readonly UserGroupPermissionRepository _userGroupPermissionRepository;
 
 
-        public UserGroupRepository(PermissionKeyRepository permissionKeyRepository)
+        public UserGroupRepository(PermissionKeyRepository permissionKeyRepository,
+            UserGroupPermissionRepository userGroupPermissionRepository)
         {
             _permissionKeyRepository = permissionKeyRepository;
+            _userGroupPermissionRepository = userGroupPermissionRepository;
         }
 
 
@@ -62,15 +65,12 @@ namespace Employees.DAL.Repositories
 
                     context.SaveChanges();
                 }
-                else if (userGroup.State == ModelStates.Modified)
+                else if (userGroup.IsDirty)
                 {
                     var userGroupEntity = GetUserGroupEntityFullByID(context, userGroup.UserGroupId);
 
-                    var userGroupPermissions = userGroup.UserGroupPermissions.ToList();
-                    userGroup.UserGroupPermissions.Clear();
                     Mapper.Map(userGroup, userGroupEntity);
-
-                    FillPermissionKeys(context, userGroupEntity, userGroupPermissions);
+                    MapPermissionKeys(context, userGroupEntity, userGroup.UserGroupPermissions.ToList());
 
                     Update(context, userGroupEntity);
 
@@ -83,7 +83,7 @@ namespace Employees.DAL.Repositories
             }
         }
 
-        public void DeleteUserGroup(long id)
+        public void DeleteUserGroupById(long id)
         {
             using (var context = GetDbContext())
             {
@@ -107,35 +107,37 @@ namespace Employees.DAL.Repositories
             userGroupEntity.UserGroupPermissions.ForEach(ugp => ugp.PermissionKeyEntity = _permissionKeyRepository.GetByID(context, ugp.PermissionKeyEntity.PermissionKeyId));
         }
 
-        private void FillPermissionKeys(EmployeeContext context, UserGroupEntity userGroupEntity, List<UserGroupPermission> userGroupPermissions)
+        private void MapPermissionKeys(EmployeeContext context, UserGroupEntity userGroupEntity, List<UserGroupPermission> userGroupPermissions)
         {
-            var originalUserGroupEntity = GetUserGroupEntityFullByID(context, userGroupEntity.UserGroupId);
-
-            var addedUserGroupPermissions = new List<UserGroupPermissionEntity>();
             foreach (var userGroupPermission in userGroupPermissions)
             {
-                if (userGroupPermission.PermissionAccessType == PermissionAccessTypes.None) continue;
-
-                if (originalUserGroupEntity.UserGroupPermissions.Count(ugpe => ugpe.PermissionKeyEntity.PermissionKeyId == userGroupPermission.PermissionKey.PermissionKeyId) == 0)
+                switch (userGroupPermission.State)
                 {
-                    var userGroupPermissionEntity = Mapper.Map<UserGroupPermissionEntity>(userGroupPermission);
-                    userGroupPermissionEntity.PermissionKeyEntity = _permissionKeyRepository.GetByID(context, userGroupPermission.PermissionKey.PermissionKeyId);
-                    userGroupPermissionEntity.UserGroupEntity = userGroupEntity;
-                    addedUserGroupPermissions.Add(userGroupPermissionEntity);
+                    case ModelStates.New:
+                        var addedUserGroupPermissionEntity = Mapper.Map<UserGroupPermissionEntity>(userGroupPermission);
+                        addedUserGroupPermissionEntity.PermissionKeyEntity = _permissionKeyRepository.GetByID(context, userGroupPermission.PermissionKey.PermissionKeyId);
+                        addedUserGroupPermissionEntity.UserGroupEntity = userGroupEntity;
+                        userGroupEntity.UserGroupPermissions.Add(addedUserGroupPermissionEntity);
+                        break;
+                    case ModelStates.Modified:
+                        var modifiedUserGroupPermissionEntity = userGroupEntity.UserGroupPermissions.First(upge => upge.UserGroupPermissionId == userGroupPermission.UserGroupPermissionId);
+                        if (userGroupPermission.PermissionAccessType == PermissionAccessTypes.None)
+                        {
+                            _userGroupPermissionRepository.DeleteUserGroupPermissionById(modifiedUserGroupPermissionEntity.UserGroupPermissionId);
+                        }
+                        else
+                        {
+                            modifiedUserGroupPermissionEntity.PermissionKeyEntity = _permissionKeyRepository.GetByID(context, userGroupPermission.PermissionKey.PermissionKeyId);
+                            modifiedUserGroupPermissionEntity.UserGroupEntity = userGroupEntity;
+                            modifiedUserGroupPermissionEntity.PermissionAccessType = userGroupPermission.PermissionAccessType;
+                        }
+                        break;
+                    case ModelStates.Deleted:
+                        var deletedUserGroupPermissionEntity = userGroupEntity.UserGroupPermissions.First(upge => upge.UserGroupPermissionId == userGroupPermission.UserGroupPermissionId);
+                        _userGroupPermissionRepository.DeleteUserGroupPermissionById(deletedUserGroupPermissionEntity.UserGroupPermissionId);
+                        break;
                 }
             }
-            userGroupEntity.UserGroupPermissions.AddRange(addedUserGroupPermissions);
-
-            var deletedUserGroupPermissions = new List<UserGroupPermissionEntity>();
-            foreach (var originalUserGroupPermissionEntity in originalUserGroupEntity.UserGroupPermissions)
-            {
-                var userGroupPermission = userGroupPermissions.FirstOrDefault(ugp => ugp.PermissionKey.PermissionKeyId == originalUserGroupPermissionEntity.PermissionKeyEntity.PermissionKeyId);
-                if (userGroupPermission == null || userGroupPermission.PermissionAccessType == PermissionAccessTypes.None)
-                {
-                    deletedUserGroupPermissions.Add(originalUserGroupPermissionEntity);
-                }
-            }
-            deletedUserGroupPermissions.ForEach(ugpe => userGroupEntity.UserGroupPermissions.Remove(ugpe));
         }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using System;
 using Caliburn.Micro;
+using Employees.Shared.Attributes;
 using Employees.Shared.Constants;
 
 namespace Employees.Shared.Models
@@ -36,6 +37,7 @@ namespace Employees.Shared.Models
             }
         }
 
+        [ConsiderIsDirtyAttribute]
         public BindableCollection<UserGroupPermission> UserGroupPermissions { get; private set; }
 
         public override string DisplayName
