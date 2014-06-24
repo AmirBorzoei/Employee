@@ -6,6 +6,7 @@ using Employees.Shared.Constants;
 using Employees.Shared.Models;
 using System.Web.UI.WebControls;
 using System.Collections.Generic;
+using Employees.Shared.Permission;
 
 namespace Employees.DAL.Repositories
 {
@@ -22,16 +23,17 @@ namespace Employees.DAL.Repositories
 
         public List<User> GetUsers(SearchQuery<UserEntity> searchQuery = null)
         {
-            var context = GetDbContext();
+            using (var context = GetDbContext())
+            {
+                if (searchQuery == null)
+                    searchQuery = new SearchQuery<UserEntity>();
 
-            if (searchQuery == null)
-                searchQuery = new SearchQuery<UserEntity>();
+                searchQuery.AddSortCriteria(new ExpressionSortCriteria<UserEntity, string>(u => u.UserName, SortDirection.Ascending));
+                searchQuery.AddSortCriteria(new ExpressionSortCriteria<UserEntity, long>(u => u.UserId, SortDirection.Ascending));
 
-            searchQuery.AddSortCriteria(new ExpressionSortCriteria<UserEntity, string>(u => u.UserName, SortDirection.Ascending));
-            searchQuery.AddSortCriteria(new ExpressionSortCriteria<UserEntity, long>(u => u.UserId, SortDirection.Ascending));
-
-            var userEntities = base.Get(context, searchQuery);
-            return Mapper.Map<List<UserEntity>, List<User>>(userEntities);
+                var userEntities = base.Get(context, searchQuery);
+                return Mapper.Map<List<UserEntity>, List<User>>(userEntities);
+            }
         }
 
         public User UpdateOrInsert(User user)
@@ -67,9 +69,22 @@ namespace Employees.DAL.Repositories
             return Mapper.Map<User>(returnEntity);
         }
 
-        public User ValidateUser(string username, string password)
+        public User ValidateUser(string userName, string password)
         {
-            return new User();
+            using (var context = GetDbContext())
+            {
+                var encryptPassword = Encryption.Encrypt(password);
+
+                var searchQuery = new SearchQuery<UserEntity>();
+                searchQuery.IncludeProperties = "UserGroups";
+                searchQuery.Filters.Add(u => u.UserName == userName);
+                searchQuery.Filters.Add(u => u.Password == encryptPassword);
+
+                var userEntity = Get(context, searchQuery).FirstOrDefault();
+                if (userEntity == null) return null;
+
+                return Mapper.Map<UserEntity, User>(userEntity);
+            }
         }
 
 

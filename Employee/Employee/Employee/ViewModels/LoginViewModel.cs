@@ -1,22 +1,30 @@
-﻿using System;
-using System.Security.Cryptography;
-using Caliburn.Micro;
+﻿using Caliburn.Micro;
+using Employees.DAL.Repositories;
 
 namespace Employees.ViewModels
 {
+    public delegate void UserLoginedEventHandler(bool userChanged);
+
+    public delegate void UserExitEventHandler();
+
     public interface ILoginViewModel : IScreen
     {
-        event EventHandler UserLogined;
-        event EventHandler UserExit;
+        event UserLoginedEventHandler UserLogined;
+        event UserExitEventHandler UserExit;
     }
 
     public class LoginViewModel : Screen, ILoginViewModel
     {
-        public event EventHandler UserLogined;
-        public event EventHandler UserExit;
-
-        private string _userName;
+        private readonly UserRepository _userRepository;
         private string _password;
+        private string _userName;
+
+
+        public LoginViewModel(UserRepository userRepository)
+        {
+            _userRepository = userRepository;
+        }
+
 
         public string UserName
         {
@@ -39,11 +47,19 @@ namespace Employees.ViewModels
         }
 
 
+        public event UserLoginedEventHandler UserLogined;
+        public event UserExitEventHandler UserExit;
+
+
         public void Login()
         {
-            RaiseUserLogined();
+            var user = _userRepository.ValidateUser(UserName, Password);
+            if (user != null)
+            {
+                RaiseUserLogined(true);
 
-            Password = string.Empty;
+                Password = string.Empty;
+            }
         }
 
         public void Exit()
@@ -52,16 +68,16 @@ namespace Employees.ViewModels
         }
 
 
-        private void RaiseUserLogined()
+        private void RaiseUserLogined(bool userChanged)
         {
             if (UserLogined != null)
-                UserLogined(null, null);
+                UserLogined(userChanged);
         }
 
         private void RaiseUserExit()
         {
             if (UserExit != null)
-                UserExit(null, null);
+                UserExit();
         }
     }
 }

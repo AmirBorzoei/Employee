@@ -124,7 +124,7 @@ namespace Employees
 
             _container.Singleton<IWindowManager, WindowManager>();
             _container.Singleton<IEventAggregator, EventAggregator>();
-
+            
             _container.PerRequest<EmployeeContext, EmployeeContext>();
             _container.PerRequest<IEmployeeUnitOfWork, EmployeeUnitOfWork>();
             _container.PerRequest<GenericRepository<EmployeeEntity>, GenericRepository<EmployeeEntity>>();
@@ -136,7 +136,7 @@ namespace Employees
             //_container.PerRequest<DialogViewModel, DialogViewModel>();
             //_container.AllTypesOf<IScreen>(Assembly.GetAssembly(typeof (EmployeeInfoViewModel)));
 
-            _container.PerRequest<IShellViewModel, ShellViewModel>();
+            _container.Singleton<IShellViewModel, ShellViewModel>();
             _container.PerRequest<ILoginViewModel, LoginViewModel>();
             
             _container.PerRequest<IEmployeeInfoViewModel, EmployeeInfoViewModel>();

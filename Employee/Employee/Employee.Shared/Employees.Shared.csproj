@@ -35,6 +35,10 @@
     <Reference Include="Caliburn.Micro">
       <HintPath>..\packages\Caliburn.Micro.1.5.2\lib\net45\Caliburn.Micro.dll</HintPath>
     </Reference>
+    <Reference Include="DevExpress.Data.v13.2, Version=13.2.5.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\..\Projects\WPF\EF\One\Employee\Lib\DevExpress\DevExpress.Data.v13.2.dll</HintPath>
+    </Reference>
     <Reference Include="DevExpress.Xpf.Core.v13.2, Version=13.2.5.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\Lib\DevExpress\DevExpress.Xpf.Core.v13.2.dll</HintPath>
@@ -69,6 +73,9 @@
     <Compile Include="Attributes\IgnoreChangeStateAttribute.cs" />
     <Compile Include="Constants\ModelStates.cs" />
     <Compile Include="Constants\PermissionAccessTypes.cs" />
+    <Compile Include="Controls\SpinnerControl.xaml.cs">
+      <DependentUpon>SpinnerControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Converters\EnumDescriptionConverter.cs" />
     <Compile Include="Converters\ObjectListToUserGroupListConverter.cs" />
     <Compile Include="Converters\TestConverter.cs" />
@@ -113,6 +120,12 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="ValueResolvers\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Page Include="Controls\SpinnerControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

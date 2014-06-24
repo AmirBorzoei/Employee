@@ -11,6 +11,8 @@ namespace Employees.ViewModels
 {
     public interface IShellViewModel
     {
+        void Start();
+        void Stop();
     }
 
     public class ShellViewModel : WorkspaceBase, IShellViewModel
@@ -19,21 +21,24 @@ namespace Employees.ViewModels
         private readonly IAdministrationWorkspaceViewModel _administrationWorkspaceViewModel;
         private readonly IEmployeeInfoViewModel _employeeInfoViewModel;
         private Visibility _loginViewVisibility;
+        private Visibility _progressbarVisibility;
 
 
         public ShellViewModel(IEventAggregator eventAggregator,
-            ILoginViewModel loginViewModel,
-            IAdministrationWorkspaceViewModel administrationWorkspaceViewModel,
-            IEmployeeInfoViewModel employeeInfoViewModel) : base(eventAggregator)
+                              ILoginViewModel loginViewModel,
+                              IAdministrationWorkspaceViewModel administrationWorkspaceViewModel,
+                              IEmployeeInfoViewModel employeeInfoViewModel) : base(eventAggregator)
         {
             _loginViewModel = loginViewModel;
-            _loginViewModel.UserLogined += _loginViewModel_UserLogined;
-            _loginViewModel.UserExit += _loginViewModel_UserExit;
+            _loginViewModel.UserLogined += UserLogined;
+            _loginViewModel.UserExit += UserExit;
 
             _administrationWorkspaceViewModel = administrationWorkspaceViewModel;
             _employeeInfoViewModel = employeeInfoViewModel;
 
             DisplayName = "* * *";
+            _loginViewVisibility = Visibility.Visible;
+            _progressbarVisibility = Visibility.Collapsed;
         }
 
 
@@ -49,6 +54,16 @@ namespace Employees.ViewModels
             {
                 _loginViewVisibility = value;
                 NotifyOfPropertyChange(() => LoginViewVisibility);
+            }
+        }
+
+        public Visibility ProgressbarVisibility
+        {
+            get { return _progressbarVisibility; }
+            private set
+            {
+                _progressbarVisibility = value;
+                NotifyOfPropertyChange(() => ProgressbarVisibility);
             }
         }
 
@@ -131,16 +146,30 @@ namespace Employees.ViewModels
 
         #region Login Handler
 
-        private void _loginViewModel_UserLogined(object sender, System.EventArgs e)
+        private void UserLogined(bool changedUser)
         {
             LoginViewVisibility = Visibility.Collapsed;
         }
 
-        private void _loginViewModel_UserExit(object sender, System.EventArgs e)
+        private void UserExit()
         {
             TryClose();
         }
 
         #endregion Login Handler
+
+        #region ProgressBar Handler
+
+        public void Start()
+        {
+            ProgressbarVisibility = Visibility.Visible;
+        }
+
+        public void Stop()
+        {
+            ProgressbarVisibility = Visibility.Collapsed;
+        }
+
+        #endregion ProgressBar Handler
     }
 }
