@@ -1,5 +1,10 @@
-﻿using Caliburn.Micro;
+﻿using System.Net.Mime;
+using System.Windows;
+using System.Windows.Input;
+using Caliburn.Micro;
 using Employees.DAL.Repositories;
+using Employees.Shared.Models;
+using Employees.Shared.Permission;
 
 namespace Employees.ViewModels
 {
@@ -51,15 +56,41 @@ namespace Employees.ViewModels
         public event UserExitEventHandler UserExit;
 
 
+        public void PasswordKeyDown(KeyEventArgs e)
+        {
+            if (e.Key == Key.Return)
+            {
+                Login();
+            }
+            else if (e.Key == Key.Escape)
+            {
+                Exit();
+            }
+        }
+
         public void Login()
         {
-            var user = _userRepository.ValidateUser(UserName, Password);
-            if (user != null)
+            var shell = IoC.Get<IShellViewModel>();
+            if (shell != null)
+                shell.Start();
+
+            var loginedUser = _userRepository.ValidateUser(UserName, Password);
+            if (loginedUser != null)
             {
-                RaiseUserLogined(true);
+                Sission.LoginedUser = loginedUser;
+                if (Application.Current.Resources.Contains(App.LoginedUserResourceKey))
+                {
+                    Application.Current.Resources[App.LoginedUserResourceKey] = Sission.LoginedUser;
+                }
+
+                var userChanged = Sission.LoginedUser == null || Sission.LoginedUser.User.UserName != UserName;
+                RaiseUserLogined(userChanged);
 
                 Password = string.Empty;
             }
+
+            if (shell != null)
+                shell.Stop();
         }
 
         public void Exit()

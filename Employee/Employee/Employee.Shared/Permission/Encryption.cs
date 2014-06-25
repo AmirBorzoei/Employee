@@ -8,6 +8,9 @@ namespace Employees.Shared.Permission
 {
     public static class Encryption
     {
+        private static byte[] _aditionalEntropy = {9, 8, 7, 6, 5};
+
+
         /// <summary>
         /// Encrypts a given password and returns the encrypted data
         /// as a base64 string.
@@ -30,7 +33,7 @@ namespace Employees.Shared.Permission
 
                 //encrypt data
                 var data = Encoding.UTF8.GetBytes(plainText);
-                byte[] encrypted = ProtectedData.Protect(data, null, DataProtectionScope.CurrentUser);
+                byte[] encrypted = ProtectedData.Protect(data, _aditionalEntropy, DataProtectionScope.CurrentUser);
 
                 //return as base64 string
                 return Convert.ToBase64String(encrypted);
@@ -40,7 +43,7 @@ namespace Employees.Shared.Permission
                 return plainText;
             }
         }
-
+        
         /// <summary>
         /// Decrypts a given string.
         /// </summary>
@@ -63,7 +66,7 @@ namespace Employees.Shared.Permission
                 byte[] data = Convert.FromBase64String(cipher);
 
                 //decrypt data
-                byte[] decrypted = ProtectedData.Unprotect(data, null, DataProtectionScope.CurrentUser);
+                byte[] decrypted = ProtectedData.Unprotect(data, _aditionalEntropy, DataProtectionScope.CurrentUser);
                 return Encoding.UTF8.GetString(decrypted);
             }
             catch

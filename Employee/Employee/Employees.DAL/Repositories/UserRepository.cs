@@ -12,11 +12,21 @@ namespace Employees.DAL.Repositories
 {
     public class UserRepository : GenericRepository<UserEntity>
     {
+        private const string SuperAdminUserName =
+            "AQAAANCMnd8BFdERjHoAwE/Cl+sBAAAAt/Si262AgkWY9D6L6U8UkQAAAAACAAAAAAAQZgAAAAEAACAAAAB8eB5DVCtKW+rEROUWjuAZiK2ZuWyZxsHUQRelh4cxfQAAAAAOgAAAAAIAACAAAADjduNMQ7iBQx9qIVz5oI6E276pgJ+9TqediLruJpOMIhAAAAAexY0KMg93FlH7HE54IyP8QAAAAHv5VqNwntcJs0RnW+3QDvodoOWw8Kut1hY6BjoPaiOgyTAdc+1mzgpeJYEhPzJAjiOPO441bP3KZy6WOCKE1oQ=";
+
+        private const string SuperAdminPassword =
+            "AQAAANCMnd8BFdERjHoAwE/Cl+sBAAAAt/Si262AgkWY9D6L6U8UkQAAAAACAAAAAAAQZgAAAAEAACAAAADgVfYTD17yhxgJmQYJXilcQpgvIy5zeYM9gO94WTRS0gAAAAAOgAAAAAIAACAAAACz0NAtcYleR79675KLF9jrSTfgXX2k3VvnwUBiG+xxThAAAAAUuLZo6skuAt1dmeW7nqJqQAAAAJBC+dqJSen7UQydlo4miK76R5v1mkPqyDwmX9opCVagTYc4ekmDQmhHZmwdl/4vIXkfmunsTcojTnzcTuy4nKo=";
+
+
+        private readonly PermissionKeyRepository _permissionKeyRepository;
         private readonly UserGroupRepository _userGroupRepository;
 
 
-        public UserRepository(UserGroupRepository userGroupRepository)
+        public UserRepository(PermissionKeyRepository permissionKeyRepository,
+            UserGroupRepository userGroupRepository)
         {
+            _permissionKeyRepository = permissionKeyRepository;
             _userGroupRepository = userGroupRepository;
         }
 
@@ -69,21 +79,34 @@ namespace Employees.DAL.Repositories
             return Mapper.Map<User>(returnEntity);
         }
 
-        public User ValidateUser(string userName, string password)
+        public LoginedUser ValidateUser(string userName, string password)
         {
             using (var context = GetDbContext())
             {
-                var encryptPassword = Encryption.Encrypt(password);
+                if (userName == Encryption.Decrypt(SuperAdminUserName) && password == Encryption.Decrypt(SuperAdminPassword))
+                {
+                    return SuperAdminUser(context);
+                }
 
                 var searchQuery = new SearchQuery<UserEntity>();
-                searchQuery.IncludeProperties = "UserGroups";
+                searchQuery.IncludeProperties = "UserGroups,UserGroups.UserGroupPermissions,UserGroups.UserGroupPermissions.PermissionKeyEntity";
                 searchQuery.Filters.Add(u => u.UserName == userName);
-                searchQuery.Filters.Add(u => u.Password == encryptPassword);
 
                 var userEntity = Get(context, searchQuery).FirstOrDefault();
-                if (userEntity == null) return null;
+                if (userEntity != null)
+                {
+                    var user = Mapper.Map<UserEntity, User>(userEntity);
+                    if (user.Password == password)
+                    {
+                        var userPermissions = GetUserPermissions(context, userEntity);
+                        var loginedUser = new LoginedUser {User = user};
+                        loginedUser.Permissions.AddRange(userPermissions);
 
-                return Mapper.Map<UserEntity, User>(userEntity);
+                        return loginedUser;
+                    }
+                }
+
+                return null;
             }
         }
 
@@ -134,6 +157,74 @@ namespace Employees.DAL.Repositories
             {
                 userEntity.UserGroups.Remove(deletedUserGroupEntity);
             }
+        }
+
+        private List<UserPermission> GetUserPermissions(EmployeeContext context, UserEntity userEntity)
+        {
+            var userPermissions = new List<UserPermission>();
+
+            if (userEntity.UserGroups == null)
+                return userPermissions;
+
+            var allPermissionKeys = _permissionKeyRepository.Get(context);
+
+            foreach (var userGroupEntity in userEntity.UserGroups)
+            {
+                foreach (var userGroupPermissionEntity in userGroupEntity.UserGroupPermissions)
+                {
+                    var permissionKeyFullName = GetPermissionKeyFullName(userGroupPermissionEntity.PermissionKeyEntity, allPermissionKeys);
+
+                    var userPermission = userPermissions.FirstOrDefault(up => up.PermissionKeyFullName == permissionKeyFullName);
+                    if (userPermission == null)
+                    {
+                        userPermission = new UserPermission {PermissionKeyFullName = permissionKeyFullName};
+                        userPermissions.Add(userPermission);
+                    }
+
+                    if ((int) userPermission.PermissionAccessType < (int) userGroupPermissionEntity.PermissionAccessType)
+                    {
+                        userPermission.PermissionAccessType = userGroupPermissionEntity.PermissionAccessType;
+                    }
+                }
+            }
+
+            return userPermissions;
+        }
+
+        private string GetPermissionKeyFullName(PermissionKeyEntity permissionKey, List<PermissionKeyEntity> allPermissionKeys)
+        {
+            var parentPermissionKey = allPermissionKeys.FirstOrDefault(pk => pk.TreeId == permissionKey.TreeParentId);
+
+            if (parentPermissionKey == null)
+                return permissionKey.PermissionKeyName;
+
+            var permissionKeyFullName = GetPermissionKeyFullName(parentPermissionKey, allPermissionKeys) + "_" + permissionKey.PermissionKeyName;
+
+            return permissionKeyFullName;
+        }
+
+        private LoginedUser SuperAdminUser(EmployeeContext context)
+        {
+            var superAdminUser = new LoginedUser();
+            superAdminUser.User = new User
+            {
+                UserId = long.MinValue,
+                FirstName = "Super",
+                LastName = "Admin",
+                UserName = "SuperAdminUser",
+            };
+
+            var allPermissionKeys = _permissionKeyRepository.Get(context);
+            foreach (var permissionKeyEntity in allPermissionKeys)
+            {
+                superAdminUser.Permissions.Add(new UserPermission
+                {
+                    PermissionKeyFullName = GetPermissionKeyFullName(permissionKeyEntity, allPermissionKeys),
+                    PermissionAccessType = PermissionAccessTypes.Active,
+                });
+            }
+
+            return superAdminUser;
         }
     }
 }

@@ -1,5 +1,7 @@
 ﻿using Caliburn.Micro;
+using Employees.Shared.Constants;
 using Employees.Shared.Interfaces;
+using Employees.Shared.Permission;
 using Employees.Shared.ViewModels;
 
 namespace Employees.Administration.ViewModels
@@ -15,8 +17,8 @@ namespace Employees.Administration.ViewModels
 
 
         public AdministrationWorkspaceViewModel(IEventAggregator eventAggregator,
-                                                IUserViewModel userViewModel,
-                                                IUserGroupWorkspaceViewModel userGroupWorkspaceViewModel) : base(eventAggregator)
+            IUserViewModel userViewModel,
+            IUserGroupWorkspaceViewModel userGroupWorkspaceViewModel) : base(eventAggregator)
         {
             _userViewModel = userViewModel;
             _userGroupWorkspaceViewModel = userGroupWorkspaceViewModel;
@@ -29,10 +31,13 @@ namespace Employees.Administration.ViewModels
         {
             base.OnInitialize();
 
-            Items.Add(_userGroupWorkspaceViewModel);
-            Items.Add(_userViewModel);
+            if (Sission.LoginedUser.HasAccess(PermissionKeys.AdministrationModule_UserGroup, PermissionAccessTypes.Active))
+                Items.Add(_userGroupWorkspaceViewModel);
+            if (Sission.LoginedUser.HasAccess(PermissionKeys.AdministrationModule_User, PermissionAccessTypes.Active))
+                Items.Add(_userViewModel);
 
-            ActivateItem(_userGroupWorkspaceViewModel);
+            if (Items.Count > 0)
+                ActivateItem(Items[0]);
         }
 
 

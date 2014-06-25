@@ -10,7 +10,6 @@ using DevExpress.Xpf.Editors;
 using Employees.Administration.ViewModels;
 using Employees.DAL;
 using Employees.DAL.Entities;
-using Employees.DAL.Migrations;
 using Employees.DAL.Repositories;
 using Employees.Personally.ViewModels;
 using Employees.Shared.Constants;

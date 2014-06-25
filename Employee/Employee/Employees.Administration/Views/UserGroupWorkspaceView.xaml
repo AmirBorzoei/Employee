@@ -5,17 +5,17 @@
              xmlns:dxdo="http://schemas.devexpress.com/winfx/2008/xaml/docking"
              xmlns:cal="http://www.caliburnproject.org"
              xmlns:dxlc="http://schemas.devexpress.com/winfx/2008/xaml/layoutcontrol"
-             xmlns:dxg="http://schemas.devexpress.com/winfx/2008/xaml/grid">
+             xmlns:dxg="http://schemas.devexpress.com/winfx/2008/xaml/grid" >
 
     <dxdo:DockLayoutManager ItemsSource="{Binding Items}"
                             cal:Message.Attach="[Event DockItemActivated] = [Action SelectedItemChanged($eventArgs)]; 
-                                                [Event DockItemClosing] = [Action SelectedItemClosing($eventArgs)]">
-        <dxdo:LayoutGroup AllowSplitters="True">
+                                                [Event DockItemClosing] = [Action SelectedItemClosing($eventArgs)]" >
+        <dxdo:LayoutGroup AllowSplitters="True" >
             <dxdo:LayoutPanel Caption="لیست"
                               ItemWidth="*"
-                              AllowClose="False">
+                              AllowClose="False" >
                 <dxg:GridControl Name="UserGroups"
-                                 ItemsSource="{Binding UserGroups}">
+                                 ItemsSource="{Binding UserGroups}" >
                     <dxg:GridControl.View>
                         <dxg:TableView ShowGroupPanel="False"
                                        AutoWidth="True" />
@@ -25,11 +25,11 @@
                                         FieldName="UserGroupName"
                                         ReadOnly="True" />
                         <dxg:GridColumn Width="130"
-                                        FixedWidth="True">
+                                        FixedWidth="True" >
                             <dxg:GridColumn.CellTemplate>
                                 <DataTemplate>
                                     <StackPanel Orientation="Horizontal"
-                                                HorizontalAlignment="Center">
+                                                HorizontalAlignment="Center" >
                                         <Button Content="+"
                                                 Margin="2 0"
                                                 ToolTip="باز کردن"
@@ -41,7 +41,8 @@
                                         <Button Content="-"
                                                 Margin="2 0"
                                                 ToolTip="حذف"
-                                                cal:Message.Attach="[Event Click] = [Action DeleteUserGroup($dataContext)]" />
+                                                cal:Message.Attach="[Event Click] = [Action DeleteUserGroup($dataContext)]"
+                                                Visibility="{Binding Source={StaticResource LoginedUser}, Converter={StaticResource UserPermissionConverter}, ConverterParameter=AdministrationModule_UserGroup_DeleteUserGroup}" />
                                     </StackPanel>
                                 </DataTemplate>
                             </dxg:GridColumn.CellTemplate>
@@ -51,13 +52,13 @@
             </dxdo:LayoutPanel>
 
             <dxdo:LayoutGroup Orientation="Vertical"
-                              ItemWidth="4*">
+                              ItemWidth="4*" >
                 <dxdo:LayoutPanel Caption="جستجو"
                                   ItemHeight="Auto"
                                   AllowClose="False"
-                                  cal:Message.Attach="[Event KeyDown] = [Action SearchPanelKeyDown($source, $eventArgs)]">
-                    <dxlc:FlowLayoutControl Orientation="Horizontal">
-                        <StackPanel Orientation="Horizontal">
+                                  cal:Message.Attach="[Event KeyDown] = [Action SearchPanelKeyDown($source, $eventArgs)]" >
+                    <dxlc:FlowLayoutControl Orientation="Horizontal" >
+                        <StackPanel Orientation="Horizontal" >
                             <TextBlock Text="نام گروه"
                                        Style="{StaticResource SearchFieldCaption}" />
                             <dxe:TextEdit EditValue="{Binding CurrentUserGroupSearch.UserGroupName, UpdateSourceTrigger=PropertyChanged}"

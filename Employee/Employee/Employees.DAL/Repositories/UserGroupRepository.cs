@@ -1,6 +1,7 @@
 ﻿using System.Data.Entity;
 using System.Linq;
 using AutoMapper;
+using Caliburn.Micro;
 using Employees.DAL.Criteria;
 using Employees.DAL.Entities;
 using Employees.Shared.Models;
@@ -58,8 +59,7 @@ namespace Employees.DAL.Repositories
                 if (userGroup.State == ModelStates.New)
                 {
                     var userGroupEntity = Mapper.Map<UserGroupEntity>(userGroup);
-
-                    ReplacePermissionKeys(context, userGroupEntity);
+                    MapPermissionKeys(context, userGroupEntity, userGroup.UserGroupPermissions);
 
                     returnEntity = Insert(context, userGroupEntity);
 
@@ -70,7 +70,7 @@ namespace Employees.DAL.Repositories
                     var userGroupEntity = GetUserGroupEntityFullByID(context, userGroup.UserGroupId);
 
                     Mapper.Map(userGroup, userGroupEntity);
-                    MapPermissionKeys(context, userGroupEntity, userGroup.UserGroupPermissions.ToList());
+                    MapPermissionKeys(context, userGroupEntity, userGroup.UserGroupPermissions);
 
                     Update(context, userGroupEntity);
 
@@ -102,13 +102,12 @@ namespace Employees.DAL.Repositories
             return base.Get(context, searchQuery).FirstOrDefault();
         }
 
-        private void ReplacePermissionKeys(EmployeeContext context, UserGroupEntity userGroupEntity)
-        {
-            userGroupEntity.UserGroupPermissions.ForEach(ugp => ugp.PermissionKeyEntity = _permissionKeyRepository.GetByID(context, ugp.PermissionKeyEntity.PermissionKeyId));
-        }
 
-        private void MapPermissionKeys(EmployeeContext context, UserGroupEntity userGroupEntity, List<UserGroupPermission> userGroupPermissions)
+        private void MapPermissionKeys(EmployeeContext context, UserGroupEntity userGroupEntity, BindableCollection<UserGroupPermission> userGroupPermissions)
         {
+            if (userGroupEntity.UserGroupPermissions == null)
+                userGroupEntity.UserGroupPermissions = new List<UserGroupPermissionEntity>();
+
             foreach (var userGroupPermission in userGroupPermissions)
             {
                 switch (userGroupPermission.State)

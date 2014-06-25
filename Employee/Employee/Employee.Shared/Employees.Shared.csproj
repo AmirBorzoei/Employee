@@ -79,6 +79,7 @@
     <Compile Include="Converters\EnumDescriptionConverter.cs" />
     <Compile Include="Converters\ObjectListToUserGroupListConverter.cs" />
     <Compile Include="Converters\TestConverter.cs" />
+    <Compile Include="Converters\UserPermissionConverter.cs" />
     <Compile Include="Events\ActiveItemChangedMessage.cs" />
     <Compile Include="Interfaces\ISupportNew.cs" />
     <Compile Include="Interfaces\ISupportPrint.cs" />
@@ -86,11 +87,15 @@
     <Compile Include="Interfaces\ISupportSave.cs" />
     <Compile Include="Models\BaseModel.cs" />
     <Compile Include="Models\Employee.cs" />
+    <Compile Include="Models\LoginedUser.cs" />
     <Compile Include="Models\PermissionKey.cs" />
     <Compile Include="Models\User.cs" />
     <Compile Include="Models\UserGroup.cs" />
     <Compile Include="Models\UserGroupPermission.cs" />
+    <Compile Include="Models\UserPermission.cs" />
     <Compile Include="Permission\Encryption.cs" />
+    <Compile Include="Permission\PermissionKeys.cs" />
+    <Compile Include="Permission\Sission.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>

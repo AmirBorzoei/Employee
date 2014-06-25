@@ -8,5 +8,6 @@
     <Converters:TestConverter x:Key="TestConverter" />
     <Converters:ObjectListToUserGroupListConverter x:Key="ObjectListToUserGroupListConverter" />
     <Converters:EnumDescriptionConverter x:Key="EnumDescriptionConverter" />
+    <Converters:UserPermissionConverter x:Key="UserPermissionConverter" />
 
 </ResourceDictionary>

@@ -5,6 +5,8 @@ using Employees.Administration.ViewModels;
 using Employees.Personally.ViewModels;
 using Employees.Shared.Events;
 using Employees.Shared.Interfaces;
+using Employees.Shared.Models;
+using Employees.Shared.Permission;
 using Employees.Shared.ViewModels;
 
 namespace Employees.ViewModels
@@ -18,23 +20,21 @@ namespace Employees.ViewModels
     public class ShellViewModel : WorkspaceBase, IShellViewModel
     {
         private readonly ILoginViewModel _loginViewModel;
-        private readonly IAdministrationWorkspaceViewModel _administrationWorkspaceViewModel;
-        private readonly IEmployeeInfoViewModel _employeeInfoViewModel;
+
+        private IAdministrationWorkspaceViewModel _administrationWorkspaceViewModel;
+        private IEmployeeInfoViewModel _employeeInfoViewModel;
+
         private Visibility _loginViewVisibility;
         private Visibility _progressbarVisibility;
+        private LoginedUser _loginedUser;
 
 
         public ShellViewModel(IEventAggregator eventAggregator,
-                              ILoginViewModel loginViewModel,
-                              IAdministrationWorkspaceViewModel administrationWorkspaceViewModel,
-                              IEmployeeInfoViewModel employeeInfoViewModel) : base(eventAggregator)
+            ILoginViewModel loginViewModel) : base(eventAggregator)
         {
             _loginViewModel = loginViewModel;
             _loginViewModel.UserLogined += UserLogined;
             _loginViewModel.UserExit += UserExit;
-
-            _administrationWorkspaceViewModel = administrationWorkspaceViewModel;
-            _employeeInfoViewModel = employeeInfoViewModel;
 
             DisplayName = "* * *";
             _loginViewVisibility = Visibility.Visible;
@@ -67,11 +67,29 @@ namespace Employees.ViewModels
             }
         }
 
+        public LoginedUser LoginedUser
+        {
+            get { return _loginedUser; }
+            set
+            {
+                _loginedUser = value;
+                NotifyOfPropertyChange(() => LoginedUser);
+            }
+        }
+
         #region Menu Handler
+
+        public void ShowAdministration()
+        {
+            if (_administrationWorkspaceViewModel == null)
+                _administrationWorkspaceViewModel = IoC.Get<IAdministrationWorkspaceViewModel>();
+
+            ActivateItem(_administrationWorkspaceViewModel);
+        }
 
         public void ShowBasicData()
         {
-            ActivateItem(null);
+            ActiveItem = null;
         }
 
         public void ShowFinancial()
@@ -81,12 +99,10 @@ namespace Employees.ViewModels
 
         public void ShowPersonally()
         {
-            ActivateItem(_employeeInfoViewModel);
-        }
+            if (_employeeInfoViewModel == null)
+                _employeeInfoViewModel = IoC.Get<IEmployeeInfoViewModel>();
 
-        public void ShowAdministration()
-        {
-            ActivateItem(_administrationWorkspaceViewModel);
+            ActivateItem(_employeeInfoViewModel);
         }
 
         #endregion Menu Handler
@@ -149,6 +165,13 @@ namespace Employees.ViewModels
         private void UserLogined(bool changedUser)
         {
             LoginViewVisibility = Visibility.Collapsed;
+
+            Items.Clear();
+            ActiveItem = null;
+            _administrationWorkspaceViewModel = null;
+            _employeeInfoViewModel = null;
+
+            LoginedUser = Sission.LoginedUser;
         }
 
         private void UserExit()

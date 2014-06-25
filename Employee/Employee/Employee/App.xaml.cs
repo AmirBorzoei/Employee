@@ -7,5 +7,6 @@ namespace Employees
     /// </summary>
     public partial class App : Application
     {
+        public static string LoginedUserResourceKey = "LoginedUser";
     }
 }

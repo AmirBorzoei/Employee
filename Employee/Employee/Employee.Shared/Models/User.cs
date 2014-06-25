@@ -84,5 +84,10 @@ namespace Employees.Shared.Models
         {
             get { return string.Join(";", _userGroups.OrderBy(ug => ug.UserGroupName).ThenBy(ug => ug.UserGroupId)); }
         }
+
+        public string FullName
+        {
+            get { return string.Format("{0} {1}", FirstName, LastName); }
+        }
     }
 }

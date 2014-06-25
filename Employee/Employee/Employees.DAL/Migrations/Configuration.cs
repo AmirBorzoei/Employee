@@ -5,14 +5,14 @@ namespace Employees.DAL.Migrations
     using System.Data.Entity.Migrations;
     using System.Linq;
 
-    internal sealed class Configuration : DbMigrationsConfiguration<EmployeeContext>
+    internal sealed class Configuration : DbMigrationsConfiguration<Employees.DAL.EmployeeContext>
     {
         public Configuration()
         {
-            AutomaticMigrationsEnabled = false;
+            AutomaticMigrationsEnabled = true;
         }
 
-        protected override void Seed(EmployeeContext context)
+        protected override void Seed(Employees.DAL.EmployeeContext context)
         {
             //  This method will be called after migrating to the latest version.
 

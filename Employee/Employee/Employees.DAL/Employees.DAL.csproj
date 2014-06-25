@@ -50,6 +50,7 @@
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Security" />
     <Reference Include="System.Web" />
     <Reference Include="System.Windows.Interactivity">
       <HintPath>..\packages\Caliburn.Micro.1.5.2\lib\net45\System.Windows.Interactivity.dll</HintPath>
@@ -77,17 +78,9 @@
     <Compile Include="Entities\UserEntity.cs" />
     <Compile Include="Entities\UserGroupEntity.cs" />
     <Compile Include="Entities\UserGroupPermissionEntity.cs" />
-    <Compile Include="Migrations\201405141142209_Initial.cs" />
-    <Compile Include="Migrations\201405141142209_Initial.Designer.cs">
-      <DependentUpon>201405141142209_Initial.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201405200617089_AddUser.cs" />
-    <Compile Include="Migrations\201405200617089_AddUser.Designer.cs">
-      <DependentUpon>201405200617089_AddUser.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201406211014297_AddPermission.cs" />
-    <Compile Include="Migrations\201406211014297_AddPermission.Designer.cs">
-      <DependentUpon>201406211014297_AddPermission.cs</DependentUpon>
+    <Compile Include="Migrations\201406251118489_Initial.cs" />
+    <Compile Include="Migrations\201406251118489_Initial.Designer.cs">
+      <DependentUpon>201406251118489_Initial.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
@@ -109,14 +102,8 @@
     <Compile Include="Repositories\UserGroupPermissionRepository.cs" />
     <Compile Include="Repositories\UserGroupRepository.cs" />
     <Compile Include="Repositories\UserRepository.cs" />
-    <EmbeddedResource Include="Migrations\201405141142209_Initial.resx">
-      <DependentUpon>201405141142209_Initial.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201405200617089_AddUser.resx">
-      <DependentUpon>201405200617089_AddUser.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201406211014297_AddPermission.resx">
-      <DependentUpon>201406211014297_AddPermission.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201406251118489_Initial.resx">
+      <DependentUpon>201406251118489_Initial.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>

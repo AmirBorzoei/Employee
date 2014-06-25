@@ -10,7 +10,7 @@ namespace Employees.DAL.Repositories
 {
     public class GenericRepository<TEntity> where TEntity : class
     {
-        protected virtual List<TEntity> Get(EmployeeContext context, SearchQuery<TEntity> searchQuery = null)
+        internal virtual List<TEntity> Get(EmployeeContext context, SearchQuery<TEntity> searchQuery = null)
         {
             var dbSet = GetDbSet(context);
 

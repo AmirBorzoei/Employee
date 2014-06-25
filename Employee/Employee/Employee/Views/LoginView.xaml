@@ -2,7 +2,8 @@
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:dxlc="http://schemas.devexpress.com/winfx/2008/xaml/layoutcontrol"
-             xmlns:dxe="http://schemas.devexpress.com/winfx/2008/xaml/editors" >
+             xmlns:dxe="http://schemas.devexpress.com/winfx/2008/xaml/editors"
+             xmlns:cal="http://www.caliburnproject.org" >
 
     <StackPanel Background="LightGray" >
         <Border BorderBrush="Black"
@@ -17,12 +18,13 @@
                         <dxlc:LayoutItem Label="نام کاربری"
                                          Width="350" >
                             <dxe:TextEdit x:Name="UserName"
-                                          EditValue="{Binding UserName}"/>
+                                          EditValue="{Binding UserName}" />
                         </dxlc:LayoutItem>
                         <dxlc:LayoutItem Label="رمز عبور"
                                          Width="350" >
-                            <dxe:PasswordBoxEdit x:Name="Password" 
-                                                 EditValue="{Binding Password}"/>
+                            <dxe:PasswordBoxEdit x:Name="Password"
+                                                 EditValue="{Binding Password, UpdateSourceTrigger=PropertyChanged}"
+                                                 cal:Message.Attach="[Event KeyDown]=[Action PasswordKeyDown($eventArgs)]" />
                         </dxlc:LayoutItem>
                     </dxlc:LayoutGroup>
                     <dxlc:LayoutGroup ItemSpace="20"

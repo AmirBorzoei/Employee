@@ -4,20 +4,20 @@
         xmlns:dxlc="http://schemas.devexpress.com/winfx/2008/xaml/layoutcontrol"
         xmlns:cal="http://www.caliburnproject.org"
         xmlns:controls="clr-namespace:Employees.Shared.Controls;assembly=Employees.Shared"
-        WindowState="Maximized">
+        WindowState="Maximized" >
     <dxlc:LayoutControl Padding="2"
-                        FlowDirection="RightToLeft">
+                        FlowDirection="RightToLeft" >
         <Grid>
             <dxlc:LayoutGroup Orientation="Vertical"
-                              ItemSpace="2">
+                              ItemSpace="2" >
                 <!--Header of Shell-->
                 <dxlc:LayoutGroup VerticalAlignment="Top"
                                   ItemSpace="10"
                                   Padding="-5 -8"
                                   View="GroupBox"
-                                  Background="LightGray">
+                                  Background="LightGray" >
                     <!--Logo-->
-                    <dxlc:LayoutItem HorizontalAlignment="Left">
+                    <dxlc:LayoutItem HorizontalAlignment="Left" >
                         <Image Source="/Employees;component/Images/Logos/Employees_Logo.png"
                                Stretch="Uniform"
                                MaxHeight="40"
@@ -25,56 +25,60 @@
                     </dxlc:LayoutItem>
                     <!--Menu-->
                     <dxlc:LayoutGroup HorizontalAlignment="Left"
-                                      VerticalAlignment="Center">
+                                      VerticalAlignment="Center" >
                         <Button x:Name="ShowAdministration"
                                 Content="مدیریت"
-                                Style="{StaticResource ShellMenuButton}" />
+                                Style="{StaticResource ShellMenuButton}"
+                                Visibility="{Binding LoginedUser, Converter={StaticResource UserPermissionConverter}, ConverterParameter=AdministrationModule}" />
                         <Button x:Name="ShowBasicData"
                                 Content="اطلاعات پایه"
-                                Style="{StaticResource ShellMenuButton}" />
+                                Style="{StaticResource ShellMenuButton}"
+                                Visibility="{Binding LoginedUser, Converter={StaticResource UserPermissionConverter}, ConverterParameter=BasicDataModule}" />
                         <Button x:Name="ShowFinancial"
                                 Content="حسابداری"
-                                Style="{StaticResource ShellMenuButton}" />
+                                Style="{StaticResource ShellMenuButton}"
+                                Visibility="{Binding LoginedUser, Converter={StaticResource UserPermissionConverter}, ConverterParameter=FinancialModule}" />
                         <Button x:Name="ShowPersonally"
                                 Content="پرسنلی"
-                                Style="{StaticResource ShellMenuButton}" />
+                                Style="{StaticResource ShellMenuButton}"
+                                Visibility="{Binding LoginedUser, Converter={StaticResource UserPermissionConverter}, ConverterParameter=PersonallyModule}" />
                     </dxlc:LayoutGroup>
                     <!--Toolbar-->
                     <dxlc:LayoutGroup HorizontalAlignment="Right"
-                                      VerticalAlignment="Center">
+                                      VerticalAlignment="Center" >
                         <Button x:Name="Save"
                                 ToolTip="ذخیره"
-                                Style="{StaticResource ShellToolbarButton}">
+                                Style="{StaticResource ShellToolbarButton}" >
                             <Image Source="/Employees;component/Images/Icons/Save.png"
                                    Style="{StaticResource ShellToolbarImage}" />
                         </Button>
                         <Button x:Name="Reload"
                                 ToolTip="بازیابی"
-                                Style="{StaticResource ShellToolbarButton}">
+                                Style="{StaticResource ShellToolbarButton}" >
                             <Image Source="/Employees;component/Images/Icons/Reload.png"
                                    Style="{StaticResource ShellToolbarImage}" />
                         </Button>
                         <Button x:Name="New"
                                 ToolTip="جدید"
-                                Style="{StaticResource ShellToolbarButton}">
+                                Style="{StaticResource ShellToolbarButton}" >
                             <Image Source="/Employees;component/Images/Icons/New.png"
                                    Style="{StaticResource ShellToolbarImage}" />
                         </Button>
                         <Button x:Name="Print"
                                 ToolTip="چاپ"
-                                Style="{StaticResource ShellToolbarButton}">
+                                Style="{StaticResource ShellToolbarButton}" >
                             <Image Source="/Employees;component/Images/Icons/Print.png"
                                    Style="{StaticResource ShellToolbarImage}" />
                         </Button>
                         <Button x:Name="Logout"
                                 ToolTip="خروج"
-                                Style="{StaticResource ShellToolbarButton}">
+                                Style="{StaticResource ShellToolbarButton}" >
                             <Image Source="/Employees;component/Images/Icons/Logout.png"
                                    Style="{StaticResource ShellToolbarImage}" />
                         </Button>
                         <Button x:Name="ChangeTheme"
                                 ToolTip="تغییر قالب"
-                                Style="{StaticResource ShellToolbarButton}">
+                                Style="{StaticResource ShellToolbarButton}" >
                             <Image Source="/Employees;component/Images/Icons/Themes.png"
                                    Style="{StaticResource ShellToolbarImage}" />
                         </Button>
@@ -84,7 +88,7 @@
                 <!--Body of Shell-->
                 <dxlc:LayoutGroup View="GroupBox"
                                   Background="LightGray"
-                                  Header="{Binding ActiveItem.DisplayName}">
+                                  Header="{Binding ActiveItem.DisplayName}" >
                     <dxlc:LayoutGroup.HeaderTemplate>
                         <DataTemplate>
                             <TextBlock HorizontalAlignment="Center"
@@ -98,7 +102,7 @@
 
             <Border x:Name="borderLogin"
                     Background="#E0778899"
-                    Visibility="{Binding LoginViewVisibility}">
+                    Visibility="{Binding LoginViewVisibility}" >
                 <ContentControl cal:View.Model="{Binding LoginViewModel}"
                                 HorizontalAlignment="Center"
                                 VerticalAlignment="Center" />
@@ -106,8 +110,8 @@
 
             <Border x:Name="borderProgressbar"
                     Background="#E0778899"
-                    Visibility="{Binding ProgressbarVisibility}">
-                <controls:SpinnerControl/>
+                    Visibility="{Binding ProgressbarVisibility}" >
+                <controls:SpinnerControl />
             </Border>
         </Grid>
     </dxlc:LayoutControl>
