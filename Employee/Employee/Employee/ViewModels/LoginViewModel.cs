@@ -23,11 +23,13 @@ namespace Employees.ViewModels
         private readonly UserRepository _userRepository;
         private string _password;
         private string _userName;
+        private Visibility _errorMaessageVisibility;
 
 
         public LoginViewModel(UserRepository userRepository)
         {
             _userRepository = userRepository;
+            _errorMaessageVisibility = Visibility.Hidden;
         }
 
 
@@ -38,6 +40,9 @@ namespace Employees.ViewModels
             {
                 _userName = value;
                 NotifyOfPropertyChange(() => UserName);
+
+                if (ErrorMaessageVisibility == Visibility.Visible)
+                    ErrorMaessageVisibility = Visibility.Hidden;
             }
         }
 
@@ -48,6 +53,19 @@ namespace Employees.ViewModels
             {
                 _password = value;
                 NotifyOfPropertyChange(() => Password);
+
+                if (ErrorMaessageVisibility == Visibility.Visible)
+                    ErrorMaessageVisibility = Visibility.Hidden;
+            }
+        }
+
+        public Visibility ErrorMaessageVisibility
+        {
+            get { return _errorMaessageVisibility; }
+            set
+            {
+                _errorMaessageVisibility = value;
+                NotifyOfPropertyChange(() => ErrorMaessageVisibility);
             }
         }
 
@@ -70,12 +88,19 @@ namespace Employees.ViewModels
 
         public void Login()
         {
+            if (ErrorMaessageVisibility == Visibility.Visible)
+                ErrorMaessageVisibility = Visibility.Hidden;
+
             var shell = IoC.Get<IShellViewModel>();
             if (shell != null)
                 shell.Start();
 
             var loginedUser = _userRepository.ValidateUser(UserName, Password);
-            if (loginedUser != null)
+            if (loginedUser == null)
+            {
+                ErrorMaessageVisibility = Visibility.Visible;
+            }
+            else
             {
                 Sission.LoginedUser = loginedUser;
                 if (Application.Current.Resources.Contains(App.LoginedUserResourceKey))

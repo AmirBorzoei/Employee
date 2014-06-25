@@ -18,13 +18,18 @@
                         <dxlc:LayoutItem Label="نام کاربری"
                                          Width="350" >
                             <dxe:TextEdit x:Name="UserName"
-                                          EditValue="{Binding UserName}" />
+                                          EditValue="{Binding UserName, UpdateSourceTrigger=PropertyChanged}" />
                         </dxlc:LayoutItem>
                         <dxlc:LayoutItem Label="رمز عبور"
                                          Width="350" >
                             <dxe:PasswordBoxEdit x:Name="Password"
                                                  EditValue="{Binding Password, UpdateSourceTrigger=PropertyChanged}"
                                                  cal:Message.Attach="[Event KeyDown]=[Action PasswordKeyDown($eventArgs)]" />
+                        </dxlc:LayoutItem>
+                        <dxlc:LayoutItem>
+                            <TextBlock Text="نام کاربری یا رمز عبور اشتباه وارد شده است."
+                                       Visibility="{Binding ErrorMaessageVisibility}" 
+                                       Foreground="Red"/>
                         </dxlc:LayoutItem>
                     </dxlc:LayoutGroup>
                     <dxlc:LayoutGroup ItemSpace="20"
