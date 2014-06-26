@@ -109,6 +109,7 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
+    <Compile Include="Results\ProgressBarResult.cs" />
     <Compile Include="ViewModels\ScreenBase.cs" />
     <Compile Include="ViewModels\WorkspaceBase.cs" />
     <Compile Include="View\IWorkspaceBaseView.cs" />

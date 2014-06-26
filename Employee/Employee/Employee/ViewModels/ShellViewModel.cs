@@ -3,21 +3,18 @@ using Caliburn.Micro;
 using DevExpress.Xpf.Core;
 using Employees.Administration.ViewModels;
 using Employees.Personally.ViewModels;
-using Employees.Shared.Events;
 using Employees.Shared.Interfaces;
 using Employees.Shared.Models;
 using Employees.Shared.Permission;
+using Employees.Shared.Results;
 using Employees.Shared.ViewModels;
 
 namespace Employees.ViewModels
 {
     public interface IShellViewModel
     {
-        void Start();
-        void Stop();
     }
-
-    public class ShellViewModel : WorkspaceBase, IShellViewModel
+    public class ShellViewModel : WorkspaceBase, IShellViewModel, IProgressBarService
     {
         private readonly ILoginViewModel _loginViewModel;
 
@@ -183,12 +180,12 @@ namespace Employees.ViewModels
 
         #region ProgressBar Handler
 
-        public void Start()
+        public void ProgressBarShow()
         {
             ProgressbarVisibility = Visibility.Visible;
         }
 
-        public void Stop()
+        public void ProgressBarHide()
         {
             ProgressbarVisibility = Visibility.Collapsed;
         }

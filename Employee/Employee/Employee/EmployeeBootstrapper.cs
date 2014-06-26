@@ -15,6 +15,7 @@ using Employees.Personally.ViewModels;
 using Employees.Shared.Constants;
 using Employees.Shared.Models;
 using Employees.Shared.Permission;
+using Employees.Shared.Results;
 using Employees.ViewModels;
 
 namespace Employees
@@ -135,7 +136,10 @@ namespace Employees
             //_container.PerRequest<DialogViewModel, DialogViewModel>();
             //_container.AllTypesOf<IScreen>(Assembly.GetAssembly(typeof (EmployeeInfoViewModel)));
 
-            _container.Singleton<IShellViewModel, ShellViewModel>();
+            _container.RegisterSingleton(typeof(IShellViewModel), "ShellViewModel", typeof(ShellViewModel));
+            var shellViewModel = _container.GetInstance(typeof (IShellViewModel), "ShellViewModel");
+            _container.RegisterInstance(typeof(IProgressBarService), "ProgressBarService", shellViewModel);
+
             _container.PerRequest<ILoginViewModel, LoginViewModel>();
             
             _container.PerRequest<IEmployeeInfoViewModel, EmployeeInfoViewModel>();

@@ -1,10 +1,12 @@
 ﻿using System.Net.Mime;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
 using Caliburn.Micro;
 using Employees.DAL.Repositories;
 using Employees.Shared.Models;
 using Employees.Shared.Permission;
+using Employees.Shared.Results;
 
 namespace Employees.ViewModels
 {
@@ -91,31 +93,32 @@ namespace Employees.ViewModels
             if (ErrorMaessageVisibility == Visibility.Visible)
                 ErrorMaessageVisibility = Visibility.Hidden;
 
-            var shell = IoC.Get<IShellViewModel>();
-            if (shell != null)
-                shell.Start();
+            ProgressBarResult.Show().ExecuteAsync();
 
-            var loginedUser = _userRepository.ValidateUser(UserName, Password);
-            if (loginedUser == null)
+            var t = new Task(() =>
             {
-                ErrorMaessageVisibility = Visibility.Visible;
-            }
-            else
-            {
-                Sission.LoginedUser = loginedUser;
-                if (Application.Current.Resources.Contains(App.LoginedUserResourceKey))
+                var loginedUser = _userRepository.ValidateUser(UserName, Password);
+                if (loginedUser == null)
                 {
-                    Application.Current.Resources[App.LoginedUserResourceKey] = Sission.LoginedUser;
+                    ErrorMaessageVisibility = Visibility.Visible;
+                }
+                else
+                {
+                    Sission.LoginedUser = loginedUser;
+                    if (Application.Current.Resources.Contains(App.LoginedUserResourceKey))
+                    {
+                        Application.Current.Resources[App.LoginedUserResourceKey] = Sission.LoginedUser;
+                    }
+
+                    var userChanged = Sission.LoginedUser == null || Sission.LoginedUser.User.UserName != UserName;
+                    RaiseUserLogined(userChanged);
+
+                    Password = string.Empty;
                 }
 
-                var userChanged = Sission.LoginedUser == null || Sission.LoginedUser.User.UserName != UserName;
-                RaiseUserLogined(userChanged);
-
-                Password = string.Empty;
-            }
-
-            if (shell != null)
-                shell.Stop();
+                ProgressBarResult.Hide().ExecuteAsync();
+            });
+            t.Start();
         }
 
         public void Exit()
