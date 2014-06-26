@@ -136,14 +136,12 @@ namespace Employees
             //_container.PerRequest<DialogViewModel, DialogViewModel>();
             //_container.AllTypesOf<IScreen>(Assembly.GetAssembly(typeof (EmployeeInfoViewModel)));
 
+            _container.PerRequest<ILoginViewModel, LoginViewModel>();
             _container.RegisterSingleton(typeof(IShellViewModel), "ShellViewModel", typeof(ShellViewModel));
             var shellViewModel = _container.GetInstance(typeof (IShellViewModel), "ShellViewModel");
             _container.RegisterInstance(typeof(IProgressBarService), "ProgressBarService", shellViewModel);
 
-            _container.PerRequest<ILoginViewModel, LoginViewModel>();
-            
             _container.PerRequest<IEmployeeInfoViewModel, EmployeeInfoViewModel>();
-
             _container.PerRequest<IAdministrationWorkspaceViewModel, AdministrationWorkspaceViewModel>();
             _container.PerRequest<IUserViewModel, UserViewModel>();
             _container.PerRequest<IUserGroupWorkspaceViewModel, UserGroupWorkspaceViewModel>();

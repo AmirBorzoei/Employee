@@ -3,6 +3,7 @@ using System.IO;
 using System.Security;
 using System.Text;
 using System.Security.Cryptography;
+using System.Windows;
 
 namespace Employees.Shared.Permission
 {
@@ -38,12 +39,14 @@ namespace Employees.Shared.Permission
                 //return as base64 string
                 return Convert.ToBase64String(encrypted);
             }
-            catch
+            catch (Exception e)
             {
+                MessageBox.Show(e.Message);
+
                 return plainText;
             }
         }
-        
+
         /// <summary>
         /// Decrypts a given string.
         /// </summary>
@@ -69,8 +72,10 @@ namespace Employees.Shared.Permission
                 byte[] decrypted = ProtectedData.Unprotect(data, _aditionalEntropy, DataProtectionScope.CurrentUser);
                 return Encoding.UTF8.GetString(decrypted);
             }
-            catch
+            catch (Exception e)
             {
+                MessageBox.Show(e.Message);
+
                 return cipher;
             }
         }
