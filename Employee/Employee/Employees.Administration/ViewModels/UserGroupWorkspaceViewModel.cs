@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Web.UI.WebControls;
 using System.Windows.Input;
 using Caliburn.Micro;
@@ -10,6 +11,7 @@ using Employees.DAL.Entities;
 using Employees.DAL.Repositories;
 using Employees.Shared.Interfaces;
 using Employees.Shared.Models;
+using Employees.Shared.Results;
 using Employees.Shared.ViewModels;
 
 namespace Employees.Administration.ViewModels
@@ -74,13 +76,21 @@ namespace Employees.Administration.ViewModels
 
         public void SearchUserGroup()
         {
-            UserGroups.Clear();
+            ProgressBarResult.Show().ExecuteAsync();
 
-            var searchQuery = new SearchQuery<UserGroupEntity>();
-            if (!string.IsNullOrEmpty(CurrentUserGroupSearch.UserGroupName))
-                searchQuery.AddFilter(ug => ug.UserGroupName.Contains(CurrentUserGroupSearch.UserGroupName));
-            
-            UserGroups.AddRange(_employeeUnitOfWork.UserGroupRepository.GetUserGroups(searchQuery));
+            var t = new Task(() =>
+            {
+                UserGroups.Clear();
+
+                var searchQuery = new SearchQuery<UserGroupEntity>();
+                if (!string.IsNullOrEmpty(CurrentUserGroupSearch.UserGroupName))
+                    searchQuery.AddFilter(ug => ug.UserGroupName.Contains(CurrentUserGroupSearch.UserGroupName));
+
+                UserGroups.AddRange(_employeeUnitOfWork.UserGroupRepository.GetUserGroups(searchQuery));
+
+                ProgressBarResult.Hide().ExecuteAsync();
+            });
+            t.Start();
         }
 
         public void SearchPanelKeyDown(LayoutPanel layoutPanel, KeyEventArgs keyEventArgs)
@@ -116,7 +126,7 @@ namespace Employees.Administration.ViewModels
 
             userGroup = _employeeUnitOfWork.UserGroupRepository.GetUserGroupFullByID(userGroup.UserGroupId);
 
-            AddNewTab(userGroup.GetCopy(false));
+            AddNewTab(userGroup);
         }
 
         public void DeleteUserGroup(EditGridCellData editGridCellData)

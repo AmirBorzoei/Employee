@@ -83,7 +83,10 @@ namespace Employees.Shared.Models
             var ignore = Attribute.IsDefined(info, typeof (IgnoreChangeStateAttribute));
 
             if (!ignore && State == ModelStates.Unchanged) //Set the state to modified, if it is not added or deleted
+            {
                 State = ModelStates.Modified;
+                NotifyOfPropertyChange(() => IsDirty);
+            }
 
             base.NotifyOfPropertyChange(propertyName);
 

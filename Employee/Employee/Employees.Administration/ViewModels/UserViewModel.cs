@@ -1,4 +1,6 @@
-﻿using System.Web.UI.WebControls;
+﻿using System.Threading.Tasks;
+using System.Web.UI.WebControls;
+using System.Windows.Controls;
 using Caliburn.Micro;
 using Employees.DAL.Criteria;
 using Employees.DAL.Entities;
@@ -6,6 +8,7 @@ using Employees.DAL.Repositories;
 using Employees.Shared.Constants;
 using Employees.Shared.Interfaces;
 using Employees.Shared.Models;
+using Employees.Shared.Results;
 using Employees.Shared.ViewModels;
 
 namespace Employees.Administration.ViewModels
@@ -44,19 +47,35 @@ namespace Employees.Administration.ViewModels
 
         public void Save()
         {
-            foreach (var user in Users)
-            {
-                if (user.IsDirty)
-                    _employeeUnitOfWork.UserRepository.UpdateOrInsert(user);
-            }
+            ProgressBarResult.Show().ExecuteAsync();
 
-            LoadUsers();
+            var t = new Task(() =>
+            {
+                foreach (var user in Users)
+                {
+                    if (user.IsDirty)
+                        _employeeUnitOfWork.UserRepository.UpdateOrInsert(user);
+                }
+
+                LoadUsers();
+
+                ProgressBarResult.Hide().ExecuteAsync();
+            });
+            t.Start();
         }
 
         public void Reload()
         {
-            LoadUsers();
-            LoadUserGroups();
+            ProgressBarResult.Show().ExecuteAsync();
+
+            var t = new Task(() =>
+            {
+                LoadUsers();
+                LoadUserGroups();
+
+                ProgressBarResult.Hide().ExecuteAsync();
+            });
+            t.Start();
         }
 
 

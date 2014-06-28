@@ -177,11 +177,11 @@ namespace Employees
 
             Mapper.CreateMap<UserGroupPermissionEntity, UserGroupPermission>()
                 .ForMember(d => d.IsNotifying, m => m.Ignore())
-                .ForMember(d => d.State, m => m.UseValue(ModelStates.Unchanged))
                 .ForMember(d => d.TreeId, m => m.Ignore())
                 .ForMember(d => d.TreeParentId, m => m.Ignore())
                 .ForMember(d => d.UserGroup, m => m.MapFrom(s => s.UserGroupEntity))
-                .ForMember(d => d.PermissionKey, m => m.MapFrom(s => s.PermissionKeyEntity));
+                .ForMember(d => d.PermissionKey, m => m.MapFrom(s => s.PermissionKeyEntity))
+                .ForMember(d => d.State, m => m.UseValue(ModelStates.Unchanged));
             Mapper.CreateMap<UserGroupPermission, UserGroupPermissionEntity>()
                 .ForMember(d => d.UserGroupEntity, m => m.MapFrom(s => s.UserGroup))
                 .ForMember(d => d.PermissionKeyEntity, m => m.MapFrom(s => s.PermissionKey));
