@@ -13,10 +13,10 @@ namespace Employees.DAL.Repositories
     public class UserRepository : GenericRepository<UserEntity>
     {
         private const string SuperAdminUserName =
-            "AQAAANCMnd8BFdERjHoAwE/Cl+sBAAAApAOtlPXb3U+0e16KkKyDkwAAAAACAAAAAAAQZgAAAAEAACAAAAB0vUmFgEChQC8aOwMFjOaCiWp771HSFuPg+DPKLzlG/AAAAAAOgAAAAAIAACAAAABizjpgmk+szxtB6W7HutfhsYcKHVUU/7dySuWUmP/PyBAAAAA8QdFoVz7d/ATQaGrFCogdQAAAALYOHjeQ8hNh09PaEoG6Tthsy7w42LoyOcyZW4jhW7LATAtdPQG0SXRY/yWOa+imN34L6EqXNLyz/JJs7xWsY+s=";
+            "052155000170162197131131248037177084223083101191";
 
         private const string SuperAdminPassword =
-            "AQAAANCMnd8BFdERjHoAwE/Cl+sBAAAApAOtlPXb3U+0e16KkKyDkwAAAAACAAAAAAAQZgAAAAEAACAAAABsOR8QGCECwvOutc6UDfmUbslzOGKoMZcpDMdURbSsVwAAAAAOgAAAAAIAACAAAAAye+Swzta9XEM2tjx9ez6grnSNpXyKk3IHbbS+/ZD1jBAAAAA25sJELBqf8plp8duaU1KsQAAAAM3htma2vhTjmQJZn/cdHsoAj/IXSZQJOIuUhT7zXzsQLJju3pU7/ZP2/J3PNP56x39VbhNRL9rU/cebeJ0DK70=";
+            "084183183007073185118172075177196105183108151150";
 
 
         private readonly PermissionKeyRepository _permissionKeyRepository;
@@ -81,9 +81,12 @@ namespace Employees.DAL.Repositories
 
         public LoginedUser ValidateUser(string userName, string password)
         {
+            var a = Encryption.EncryptToString(userName);
+            var aa = Encryption.EncryptToString(password);
+
             using (var context = GetDbContext())
             {
-                if (userName == Encryption.Decrypt(SuperAdminUserName) && password == Encryption.Decrypt(SuperAdminPassword))
+                if (userName == Encryption.DecryptString(SuperAdminUserName) && password == Encryption.DecryptString(SuperAdminPassword))
                 {
                     return SuperAdminUser(context);
                 }
