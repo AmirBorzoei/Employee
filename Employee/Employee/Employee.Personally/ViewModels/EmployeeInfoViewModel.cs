@@ -1,5 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
+using System.Windows.Controls;
 using System.Windows.Documents;
 using Caliburn.Micro;
 using Employees.DAL;
@@ -7,10 +9,11 @@ using Employees.DAL.Entities;
 using Employees.DAL.Repositories;
 using Employees.Shared.Interfaces;
 using Employees.Shared.Models;
+using Employees.Shared.Results;
 
 namespace Employees.Personally.ViewModels
 {
-    public interface IEmployeeInfoViewModel : IScreen, ISupportSave, ISupportPrint
+    public interface IEmployeeInfoViewModel : IScreen, ISupportSave, ISupportPrint, ISupportNew, ISupportReload
     {
     }
 
@@ -22,7 +25,7 @@ namespace Employees.Personally.ViewModels
 
 
         public EmployeeInfoViewModel(IWindowManager windowManager,
-                                     IEmployeeUnitOfWork employeeUnitOfWork)
+            IEmployeeUnitOfWork employeeUnitOfWork)
         {
             _windowManager = windowManager;
             _employeeUnitOfWork = employeeUnitOfWork;
@@ -51,44 +54,52 @@ namespace Employees.Personally.ViewModels
         {
             base.OnViewLoaded(view);
 
-            //FillAllEmployees();
+            RefreshAllEmployees();
         }
 
 
+        public void New()
+        {
+            CurrentEmployee = new Employee();
+        }
+
         public void Save()
         {
-            //var employeeEntity = Mapper.Map<Employee, EmployeeEntity>(CurrentEmployee);
-            //_employeeUnitOfWork.EmployeeRepository.Insert(employeeEntity);
+            ProgressBarResult.Show().ExecuteAsync();
+
+            var t = new Task(() =>
+            {
+                CurrentEmployee = _employeeUnitOfWork.EmployeeRepository.UpdateOrInsert(CurrentEmployee);
+
+                RefreshAllEmployees();
+
+                ProgressBarResult.Hide().ExecuteAsync();
+            });
+            t.Start();
+        }
+
+        public void Reload()
+        {
+            ProgressBarResult.Show().ExecuteAsync();
+
+            var t = new Task(() =>
+            {
+                RefreshAllEmployees();
+                ProgressBarResult.Hide().ExecuteAsync();
+            });
+            t.Start();
         }
 
         public void Print()
         {
         }
 
-        public void SayHello()
-        {
-            //_windowManager.ShowWindow(_dialogViewModel);
-        }
-
-
-        private void FillAllEmployees()
-        {
-            //AllEmployees.AddRange(Mapper.Map<IEnumerable<EmployeeEntity>, IEnumerable<Employee>>(_employeeUnitOfWork.EmployeeRepository.Get()));
-        }
-
-        private void AddNewEmployeeToAllEmployees(Employee newEmployee)
-        {
-            AllEmployees.Add(newEmployee);
-        }
 
         private void RefreshAllEmployees()
         {
-            //AllEmployees.Clear();
+            AllEmployees.Clear();
 
-            //using (var db = new EmployeeContext())
-            //{
-            //    AllEmployees.AddRange(db.Employees.ToList());
-            //}
+            AllEmployees.AddRange(_employeeUnitOfWork.EmployeeRepository.GetUserGroups());
         }
     }
 }

@@ -127,7 +127,7 @@ namespace Employees
             
             _container.PerRequest<EmployeeContext, EmployeeContext>();
             _container.PerRequest<IEmployeeUnitOfWork, EmployeeUnitOfWork>();
-            _container.PerRequest<GenericRepository<EmployeeEntity>, GenericRepository<EmployeeEntity>>();
+            _container.PerRequest<EmployeeRepository, EmployeeRepository>();
             _container.PerRequest<UserGroupRepository, UserGroupRepository>();
             _container.PerRequest<UserRepository, UserRepository>();
             _container.PerRequest<PermissionKeyRepository, PermissionKeyRepository>();

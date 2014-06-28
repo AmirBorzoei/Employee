@@ -4,60 +4,60 @@
              xmlns:dxe="http://schemas.devexpress.com/winfx/2008/xaml/editors"
              xmlns:dxg="http://schemas.devexpress.com/winfx/2008/xaml/grid"
              xmlns:dxlc="http://schemas.devexpress.com/winfx/2008/xaml/layoutcontrol"
-             xmlns:System="clr-namespace:System;assembly=mscorlib">
+             xmlns:System="clr-namespace:System;assembly=mscorlib" >
 
     <UserControl.Resources>
-        <System:Type x:Key="TypeOfInt32">System:Int32</System:Type>
+        <System:Type x:Key="TypeOfInt32" >System:Int32</System:Type>
     </UserControl.Resources>
 
     <dxlc:LayoutControl>
         <dxlc:LayoutGroup Orientation="Vertical"
-                          ItemSpace="20">
-            <dxlc:LayoutGroup ItemSpace="20">
-                <dxlc:LayoutGroup Orientation="Vertical">
-                    <dxlc:LayoutItem Label="کد پرسنلی">
+                          ItemSpace="20" >
+            <dxlc:LayoutGroup ItemSpace="20" >
+                <dxlc:LayoutGroup Orientation="Vertical" >
+                    <dxlc:LayoutItem Label="کد پرسنلی" >
                         <dxe:TextEdit x:Name="CurrentEmployee_PersonallyCode"
                                       EditValue="{Binding CurrentEmployee.PersonallyCode}" />
                     </dxlc:LayoutItem>
-                    <dxlc:LayoutItem Label="کد ملی">
+                    <dxlc:LayoutItem Label="کد ملی" >
                         <dxe:TextEdit x:Name="CurrentEmployee_NationalCode"
                                       EditValue="{Binding CurrentEmployee.NationalCode}" />
                     </dxlc:LayoutItem>
 
-                    <dxlc:LayoutItem Label="نام">
+                    <dxlc:LayoutItem Label="نام" >
                         <dxe:TextEdit x:Name="CurrentEmployee_FirstName"
                                       EditValue="{Binding CurrentEmployee.FirstName}" />
                     </dxlc:LayoutItem>
-                    <dxlc:LayoutItem Label="نام خانوادگی">
+                    <dxlc:LayoutItem Label="نام خانوادگی" >
                         <dxe:TextEdit x:Name="CurrentEmployee_LastName"
                                       EditValue="{Binding CurrentEmployee.LastName}" />
                     </dxlc:LayoutItem>
 
-                    <dxlc:LayoutItem Label="نام پدر">
+                    <dxlc:LayoutItem Label="نام پدر" >
                         <dxe:TextEdit x:Name="CurrentEmployee_FatherName"
                                       EditValue="{Binding CurrentEmployee.FatherName}" />
                     </dxlc:LayoutItem>
                 </dxlc:LayoutGroup>
 
-                <dxlc:LayoutGroup Orientation="Vertical">
-                    <dxlc:LayoutItem Label="سن">
+                <dxlc:LayoutGroup Orientation="Vertical" >
+                    <dxlc:LayoutItem Label="سن" >
                         <dxe:SpinEdit x:Name="CurrentEmployee_Age"
                                       EditValue="{Binding CurrentEmployee.Age}"
                                       EditValueType="{StaticResource TypeOfInt32}" />
                     </dxlc:LayoutItem>
-                    <dxlc:LayoutItem Label="سابقه">
+                    <dxlc:LayoutItem Label="سابقه" >
                         <dxe:SpinEdit x:Name="CurrentEmployee_WorkHistory"
                                       EditValue="{Binding CurrentEmployee.WorkHistory}"
                                       EditValueType="{StaticResource TypeOfInt32}" />
                     </dxlc:LayoutItem>
-                    <dxlc:LayoutItem Label="تعداد عائله">
+                    <dxlc:LayoutItem Label="تعداد عائله" >
                         <dxe:SpinEdit x:Name="CurrentEmployee_FamilyCount"
                                       EditValue="{Binding CurrentEmployee.FamilyCount}"
                                       EditValueType="{StaticResource TypeOfInt32}" />
                     </dxlc:LayoutItem>
                     <dxlc:LayoutItem>
                         <StackPanel Orientation="Horizontal"
-                                    Margin="0 0 20 0">
+                                    Margin="0 0 20 0" >
                             <dxe:CheckEdit x:Name="CurrentEmployee_IsMarried"
                                            EditValue="{Binding CurrentEmployee.IsMarried}" />
                             <TextBlock Text="متاهل"
@@ -68,7 +68,7 @@
             </dxlc:LayoutGroup>
 
             <dxg:GridControl x:Name="AllEmployees"
-                             ItemsSource="{Binding AllEmployees}">
+                             ItemsSource="{Binding AllEmployees}" >
                 <dxg:GridControl.Columns>
                     <dxg:GridColumn x:Name="PersonallyCode"
                                     Width="10"
@@ -106,7 +106,7 @@
                     <dxg:GridColumn x:Name="IsMarried"
                                     Width="10"
                                     FieldName="IsMarried"
-                                    Header="متاهل">
+                                    Header="متاهل" >
                         <dxg:GridColumn.EditSettings>
                             <dxe:CheckEditSettings />
                         </dxg:GridColumn.EditSettings>
@@ -115,7 +115,8 @@
                 <dxg:GridControl.View>
                     <dxg:TableView x:Name="TableViewAllEmployees"
                                    AutoWidth="True"
-                                   AllowEditing="False" />
+                                   AllowEditing="False"
+                                   ShowGroupPanel="False" />
                 </dxg:GridControl.View>
             </dxg:GridControl>
         </dxlc:LayoutGroup>

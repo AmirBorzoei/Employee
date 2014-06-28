@@ -1,3 +1,6 @@
 Task
 Container: Two service by one implimentation
 ProtectedData.Protect/Unprotect: In defferent machin
+DataValidation
+SetupAndPackage
+Print

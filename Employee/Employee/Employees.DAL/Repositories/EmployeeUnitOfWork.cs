@@ -8,18 +8,18 @@ namespace Employees.DAL.Repositories
         UserRepository UserRepository { get; }
         PermissionKeyRepository PermissionKeyRepository { get; }
 
-        GenericRepository<EmployeeEntity> EmployeeRepository { get; }
+        EmployeeRepository EmployeeRepository { get; }
     }
 
     public class EmployeeUnitOfWork : IEmployeeUnitOfWork
     {
-        private readonly GenericRepository<EmployeeEntity> _employeeRepository;
+        private readonly EmployeeRepository _employeeRepository;
         private readonly UserGroupRepository _userGroupRepository;
         private readonly UserRepository _userRepository;
         private readonly PermissionKeyRepository _permissionKeyRepository;
 
 
-        public EmployeeUnitOfWork(GenericRepository<EmployeeEntity> employeeRepository,
+        public EmployeeUnitOfWork(EmployeeRepository employeeRepository,
             UserGroupRepository userGroupRepository,
             UserRepository userRepository,
             PermissionKeyRepository permissionKeyRepository)
@@ -31,7 +31,7 @@ namespace Employees.DAL.Repositories
         }
 
 
-        public GenericRepository<EmployeeEntity> EmployeeRepository
+        public EmployeeRepository EmployeeRepository
         {
             get { return _employeeRepository; }
         }
