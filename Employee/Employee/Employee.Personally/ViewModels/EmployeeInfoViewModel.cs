@@ -1,15 +1,10 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using System.Windows.Controls;
-using System.Windows.Documents;
+﻿using System.Threading.Tasks;
+using System.Windows;
 using Caliburn.Micro;
-using Employees.DAL;
-using Employees.DAL.Entities;
 using Employees.DAL.Repositories;
 using Employees.Shared.Interfaces;
 using Employees.Shared.Models;
-using Employees.Shared.Results;
+using Employees.Shared.Services;
 
 namespace Employees.Personally.ViewModels
 {
@@ -65,33 +60,32 @@ namespace Employees.Personally.ViewModels
 
         public void Save()
         {
-            ProgressBarResult.Show().ExecuteAsync();
+            Task.Factory.StartNew(ProgressBarService.Show);
 
-            var t = new Task(() =>
+            var task = Task.Factory.StartNew(() =>
             {
                 CurrentEmployee = _employeeUnitOfWork.EmployeeRepository.UpdateOrInsert(CurrentEmployee);
 
                 RefreshAllEmployees();
-
-                ProgressBarResult.Hide().ExecuteAsync();
             });
-            t.Start();
+
+            task.ContinueWith(arg => Task.Factory.StartNew(ProgressBarService.Hide));
         }
 
         public void Reload()
         {
-            ProgressBarResult.Show().ExecuteAsync();
+            Task.Factory.StartNew(ProgressBarService.Show);
 
-            var t = new Task(() =>
-            {
-                RefreshAllEmployees();
-                ProgressBarResult.Hide().ExecuteAsync();
-            });
-            t.Start();
+            var task = Task.Factory.StartNew(RefreshAllEmployees);
+
+            task.ContinueWith(arg => Task.Factory.StartNew(ProgressBarService.Hide));
         }
 
-        public void Print()
+        public void Print(Window ownerWindow)
         {
+            var view = GetView() as ISupportPrint;
+            if (view != null)
+                view.Print(ownerWindow);
         }
 
 

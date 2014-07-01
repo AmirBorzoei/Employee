@@ -11,7 +11,7 @@ using Employees.DAL.Entities;
 using Employees.DAL.Repositories;
 using Employees.Shared.Interfaces;
 using Employees.Shared.Models;
-using Employees.Shared.Results;
+using Employees.Shared.Services;
 using Employees.Shared.ViewModels;
 
 namespace Employees.Administration.ViewModels
@@ -76,9 +76,9 @@ namespace Employees.Administration.ViewModels
 
         public void SearchUserGroup()
         {
-            ProgressBarResult.Show().ExecuteAsync();
+            Task.Factory.StartNew(ProgressBarService.Show);
 
-            var t = new Task(() =>
+            var task = Task.Factory.StartNew(() =>
             {
                 UserGroups.Clear();
 
@@ -87,10 +87,9 @@ namespace Employees.Administration.ViewModels
                     searchQuery.AddFilter(ug => ug.UserGroupName.Contains(CurrentUserGroupSearch.UserGroupName));
 
                 UserGroups.AddRange(_employeeUnitOfWork.UserGroupRepository.GetUserGroups(searchQuery));
-
-                ProgressBarResult.Hide().ExecuteAsync();
             });
-            t.Start();
+
+            task.ContinueWith(arg => Task.Factory.StartNew(ProgressBarService.Hide));
         }
 
         public void SearchPanelKeyDown(LayoutPanel layoutPanel, KeyEventArgs keyEventArgs)

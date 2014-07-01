@@ -1,7 +1,9 @@
-﻿namespace Employees.Shared.Interfaces
+﻿using System.Windows;
+
+namespace Employees.Shared.Interfaces
 {
     public interface ISupportPrint
     {
-        void Print();
+        void Print(Window ownerWindow);
     }
 }

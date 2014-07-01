@@ -15,7 +15,7 @@ using Employees.Personally.ViewModels;
 using Employees.Shared.Constants;
 using Employees.Shared.Models;
 using Employees.Shared.Permission;
-using Employees.Shared.Results;
+using Employees.Shared.Services;
 using Employees.ViewModels;
 
 namespace Employees

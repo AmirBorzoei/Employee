@@ -6,7 +6,7 @@ using Employees.Personally.ViewModels;
 using Employees.Shared.Interfaces;
 using Employees.Shared.Models;
 using Employees.Shared.Permission;
-using Employees.Shared.Results;
+using Employees.Shared.Services;
 using Employees.Shared.ViewModels;
 
 namespace Employees.ViewModels
@@ -131,7 +131,7 @@ namespace Employees.ViewModels
         {
             var item = ActiveItem as ISupportPrint;
             if (item != null)
-                item.Print();
+                item.Print(GetView() as Window);
         }
 
         public void Logout()

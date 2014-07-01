@@ -1,12 +1,10 @@
-﻿using System.Net.Mime;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
 using Caliburn.Micro;
 using Employees.DAL.Repositories;
-using Employees.Shared.Models;
 using Employees.Shared.Permission;
-using Employees.Shared.Results;
+using Employees.Shared.Services;
 
 namespace Employees.ViewModels
 {
@@ -93,9 +91,10 @@ namespace Employees.ViewModels
             if (ErrorMaessageVisibility == Visibility.Visible)
                 ErrorMaessageVisibility = Visibility.Hidden;
 
-            ProgressBarResult.Show().ExecuteAsync();
 
-            var t = new Task(() =>
+            Task.Factory.StartNew(ProgressBarService.Show);
+
+            var task = Task.Factory.StartNew(() =>
             {
                 var loginedUser = _userRepository.ValidateUser(UserName, Password);
                 if (loginedUser == null)
@@ -115,10 +114,33 @@ namespace Employees.ViewModels
 
                     Password = string.Empty;
                 }
-
-                ProgressBarResult.Hide().ExecuteAsync();
             });
-            t.Start();
+
+            task.ContinueWith(arg => Task.Factory.StartNew(ProgressBarService.Hide));
+
+            //Task.Factory.StartNew(() =>
+            //{
+            //    var loginedUser = _userRepository.ValidateUser(UserName, Password);
+            //    if (loginedUser == null)
+            //    {
+            //        ErrorMaessageVisibility = Visibility.Visible;
+            //    }
+            //    else
+            //    {
+            //        Sission.LoginedUser = loginedUser;
+            //        if (Application.Current.Resources.Contains(App.LoginedUserResourceKey))
+            //        {
+            //            Application.Current.Resources[App.LoginedUserResourceKey] = Sission.LoginedUser;
+            //        }
+
+            //        var userChanged = Sission.LoginedUser == null || Sission.LoginedUser.User.UserName != UserName;
+            //        RaiseUserLogined(userChanged);
+
+            //        Password = string.Empty;
+            //    }
+
+            //    ProgressBarResult.Hide().ExecuteAsync();
+            //});
         }
 
         public void Exit()

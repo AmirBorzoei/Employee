@@ -1,14 +1,11 @@
 ﻿using System.Threading.Tasks;
-using System.Web.UI.WebControls;
-using System.Windows.Controls;
 using Caliburn.Micro;
 using Employees.DAL.Criteria;
 using Employees.DAL.Entities;
 using Employees.DAL.Repositories;
-using Employees.Shared.Constants;
 using Employees.Shared.Interfaces;
 using Employees.Shared.Models;
-using Employees.Shared.Results;
+using Employees.Shared.Services;
 using Employees.Shared.ViewModels;
 
 namespace Employees.Administration.ViewModels
@@ -40,16 +37,16 @@ namespace Employees.Administration.ViewModels
         protected override void OnViewLoaded(object view)
         {
             base.OnViewLoaded(view);
-            
+
             Reload();
         }
 
 
         public void Save()
         {
-            ProgressBarResult.Show().ExecuteAsync();
+            Task.Factory.StartNew(ProgressBarService.Show);
 
-            var t = new Task(() =>
+            var task = Task.Factory.StartNew(() =>
             {
                 foreach (var user in Users)
                 {
@@ -58,24 +55,22 @@ namespace Employees.Administration.ViewModels
                 }
 
                 LoadUsers();
-
-                ProgressBarResult.Hide().ExecuteAsync();
             });
-            t.Start();
+
+            task.ContinueWith(arg => Task.Factory.StartNew(ProgressBarService.Hide));
         }
 
         public void Reload()
         {
-            ProgressBarResult.Show().ExecuteAsync();
+            Task.Factory.StartNew(ProgressBarService.Show);
 
-            var t = new Task(() =>
+            var task = Task.Factory.StartNew(() =>
             {
                 LoadUsers();
                 LoadUserGroups();
-
-                ProgressBarResult.Hide().ExecuteAsync();
             });
-            t.Start();
+
+            task.ContinueWith(arg => Task.Factory.StartNew(ProgressBarService.Hide));
         }
 
 

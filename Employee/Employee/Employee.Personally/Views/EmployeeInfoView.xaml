@@ -119,6 +119,13 @@
                                    ShowGroupPanel="False" />
                 </dxg:GridControl.View>
             </dxg:GridControl>
+            <Button Click="ButtonBase_OnClick"
+                    Height="30"
+                    Width="120"
+                    VerticalAlignment="Bottom"
+                    HorizontalAlignment="Center" >
+                Print
+            </Button>
         </dxlc:LayoutGroup>
     </dxlc:LayoutControl>
 </UserControl>
