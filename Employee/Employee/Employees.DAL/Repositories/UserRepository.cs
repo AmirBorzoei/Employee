@@ -79,13 +79,17 @@ namespace Employees.DAL.Repositories
             return Mapper.Map<User>(returnEntity);
         }
 
-        public LoginedUser ValidateUser(string userName, string password)
+        public LoginedUser ValidateUser(string userName, string password, bool returnSuperAdminUser)
         {
-            var a = Encryption.EncryptToString(userName);
-            var aa = Encryption.EncryptToString(password);
-
             using (var context = GetDbContext())
             {
+#if Develop
+                if (returnSuperAdminUser)
+                {
+                    return SuperAdminUser(context);
+                }
+#endif
+
                 if (userName == Encryption.DecryptString(SuperAdminUserName) && password == Encryption.DecryptString(SuperAdminPassword))
                 {
                     return SuperAdminUser(context);

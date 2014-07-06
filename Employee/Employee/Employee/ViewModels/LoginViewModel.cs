@@ -74,6 +74,16 @@ namespace Employees.ViewModels
         public event UserExitEventHandler UserExit;
 
 
+        protected override void OnViewLoaded(object view)
+        {
+            base.OnViewLoaded(view);
+
+#if Develop
+            Login(true);
+#endif
+        }
+
+
         public void PasswordKeyDown(KeyEventArgs e)
         {
             if (e.Key == Key.Return)
@@ -86,7 +96,7 @@ namespace Employees.ViewModels
             }
         }
 
-        public void Login()
+        public void Login(bool isFirstTime = false)
         {
             if (ErrorMaessageVisibility == Visibility.Visible)
                 ErrorMaessageVisibility = Visibility.Hidden;
@@ -96,7 +106,7 @@ namespace Employees.ViewModels
 
             var task = Task.Factory.StartNew(() =>
             {
-                var loginedUser = _userRepository.ValidateUser(UserName, Password);
+                var loginedUser = _userRepository.ValidateUser(UserName, Password, isFirstTime);
                 if (loginedUser == null)
                 {
                     ErrorMaessageVisibility = Visibility.Visible;
@@ -117,30 +127,6 @@ namespace Employees.ViewModels
             });
 
             task.ContinueWith(arg => Task.Factory.StartNew(ProgressBarService.Hide));
-
-            //Task.Factory.StartNew(() =>
-            //{
-            //    var loginedUser = _userRepository.ValidateUser(UserName, Password);
-            //    if (loginedUser == null)
-            //    {
-            //        ErrorMaessageVisibility = Visibility.Visible;
-            //    }
-            //    else
-            //    {
-            //        Sission.LoginedUser = loginedUser;
-            //        if (Application.Current.Resources.Contains(App.LoginedUserResourceKey))
-            //        {
-            //            Application.Current.Resources[App.LoginedUserResourceKey] = Sission.LoginedUser;
-            //        }
-
-            //        var userChanged = Sission.LoginedUser == null || Sission.LoginedUser.User.UserName != UserName;
-            //        RaiseUserLogined(userChanged);
-
-            //        Password = string.Empty;
-            //    }
-
-            //    ProgressBarResult.Hide().ExecuteAsync();
-            //});
         }
 
         public void Exit()

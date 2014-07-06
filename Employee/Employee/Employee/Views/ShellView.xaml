@@ -5,9 +5,9 @@
         xmlns:cal="http://www.caliburnproject.org"
         xmlns:controls="clr-namespace:Employees.Shared.Controls;assembly=Employees.Shared"
         WindowState="Maximized" >
-    <dxlc:LayoutControl Padding="2"
-                        FlowDirection="RightToLeft" >
-        <Grid>
+
+    <Grid FlowDirection="RightToLeft" >
+        <dxlc:LayoutControl Padding="2" >
             <dxlc:LayoutGroup Orientation="Vertical"
                               ItemSpace="2" >
                 <!--Header of Shell-->
@@ -23,6 +23,20 @@
                                MaxHeight="40"
                                MaxWidth="100" />
                     </dxlc:LayoutItem>
+                    <!--Login User-->
+                    <dxlc:LayoutGroup HorizontalAlignment="Left"
+                                      VerticalAlignment="Center"
+                                      Orientation="Vertical"
+                                      Margin="5 0" >
+                        <dxlc:LayoutItem Label="نام کاربر جاری: " >
+                            <TextBlock Text="{Binding LoginedUser.User.FullName}"
+                                       FontWeight="Bold" />
+                        </dxlc:LayoutItem>
+                        <dxlc:LayoutItem Label="گروه کاربر جاری: " >
+                            <TextBlock Text="{Binding LoginedUser.User.UserGroupsDisplay}"
+                                       FontWeight="Bold" />
+                        </dxlc:LayoutItem>
+                    </dxlc:LayoutGroup>
                     <!--Menu-->
                     <dxlc:LayoutGroup HorizontalAlignment="Left"
                                       VerticalAlignment="Center" >
@@ -99,20 +113,20 @@
                                     Margin="-8" />
                 </dxlc:LayoutGroup>
             </dxlc:LayoutGroup>
+        </dxlc:LayoutControl>
 
-            <Border x:Name="borderLogin"
-                    Background="#E0778899"
-                    Visibility="{Binding LoginViewVisibility}" >
-                <ContentControl cal:View.Model="{Binding LoginViewModel}"
-                                HorizontalAlignment="Center"
-                                VerticalAlignment="Center" />
-            </Border>
+        <Border x:Name="borderLogin"
+                Background="#E0778899"
+                Visibility="{Binding LoginViewVisibility}" >
+            <ContentControl cal:View.Model="{Binding LoginViewModel}"
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Center" />
+        </Border>
 
-            <Border x:Name="borderProgressbar"
-                    Background="#E0778899"
-                    Visibility="{Binding ProgressbarVisibility}" >
-                <controls:SpinnerControl />
-            </Border>
-        </Grid>
-    </dxlc:LayoutControl>
+        <Border x:Name="borderProgressbar"
+                Background="#E0778899"
+                Visibility="{Binding ProgressbarVisibility}" >
+            <controls:SpinnerControl />
+        </Border>
+    </Grid>
 </Window>

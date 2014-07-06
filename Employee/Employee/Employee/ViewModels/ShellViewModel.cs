@@ -33,7 +33,7 @@ namespace Employees.ViewModels
             _loginViewModel.UserLogined += UserLogined;
             _loginViewModel.UserExit += UserExit;
 
-            DisplayName = "* * *";
+            DisplayName = "اطلاعات کارمندان";
             _loginViewVisibility = Visibility.Visible;
             _progressbarVisibility = Visibility.Collapsed;
         }
